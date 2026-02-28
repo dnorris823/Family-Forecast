@@ -9,6 +9,7 @@ import { CreateTaskDialog } from "@/components/tasks/create-task-dialog"
 import { getTasks, updateTaskStatus } from "./actions"
 import { type Task } from "@/types"
 import { cn } from "@/lib/utils"
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription"
 
 export default function TasksPage() {
     const [tasks, setTasks] = React.useState<Task[]>([])
@@ -17,6 +18,8 @@ export default function TasksPage() {
         const data = await getTasks()
         setTasks(data as unknown as Task[])
     }, [])
+
+    useRealtimeSubscription('tasks', fetchTasks)
 
     React.useEffect(() => {
         fetchTasks()
@@ -98,6 +101,6 @@ export default function TasksPage() {
                     </div>
                 </TabsContent>
             </Tabs>
-        </div>
+        </div >
     )
 }

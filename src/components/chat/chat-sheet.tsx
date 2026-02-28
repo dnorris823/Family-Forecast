@@ -16,6 +16,27 @@ export function ChatSheet() {
         { role: 'assistant', content: "Hi! I'm your family AI. Ask me about your calendar or tasks." }
     ])
     const [isLoading, setIsLoading] = React.useState(false)
+    const [models, setModels] = React.useState<string[]>([])
+    const [selectedModel, setSelectedModel] = React.useState<string>('llama3.1')
+
+    // Fetch available models when sheet opens
+    React.useEffect(() => {
+        if (isOpen && models.length === 0) {
+            fetch('/api/ai/models')
+                .then(res => res.json())
+                .then(data => {
+                    const modelNames = data.models?.map((m: any) => m.name) || []
+                    setModels(modelNames)
+                    // Set default if available
+                    if (modelNames.includes('llama3.1')) {
+                        setSelectedModel('llama3.1')
+                    } else if (modelNames.length > 0) {
+                        setSelectedModel(modelNames[0])
+                    }
+                })
+                .catch(err => console.error('Failed to fetch models:', err))
+        }
+    }, [isOpen, models.length])
 
     const handleSend = async () => {
         if (!input.trim() || isLoading) return
@@ -27,7 +48,7 @@ export function ChatSheet() {
 
         try {
             // Create a temporary history for the API (excluding the initial greeting if needed, strictly it's fine)
-            const responseContent = await chatWithAI([...messages, userMessage])
+            const responseContent = await chatWithAI([...messages, userMessage], selectedModel)
 
             const aiMessage: Message = { role: 'assistant', content: responseContent }
             setMessages(prev => [...prev, aiMessage])
@@ -58,10 +79,24 @@ export function ChatSheet() {
             </SheetTrigger>
             <SheetContent className="w-[400px] sm:w-[540px] flex flex-col p-0">
                 <SheetHeader className="p-4 border-b">
-                    <SheetTitle className="flex items-center gap-2">
-                        <Bot className="h-5 w-5 text-primary" />
-                        Family AI
-                    </SheetTitle>
+                    <div className="flex items-center justify-between">
+                        <SheetTitle className="flex items-center gap-2">
+                            <Bot className="h-5 w-5 text-primary" />
+                            Family AI
+                        </SheetTitle>
+                        {models.length > 0 && (
+                            <select
+                                value={selectedModel}
+                                onChange={(e) => setSelectedModel(e.target.value)}
+                                className="text-xs border rounded px-2 py-1 bg-background"
+                                disabled={isLoading}
+                            >
+                                {models.map(model => (
+                                    <option key={model} value={model}>{model}</option>
+                                ))}
+                            </select>
+                        )}
+                    </div>
                 </SheetHeader>
 
                 <ScrollArea className="flex-1 p-4">

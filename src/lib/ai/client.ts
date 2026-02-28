@@ -4,13 +4,13 @@ export interface Message {
     content: string
 }
 
-export async function chatWithAI(messages: Message[]) {
+export async function chatWithAI(messages: Message[], model?: string) {
     const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ messages }),
+        body: JSON.stringify({ messages, model }),
     })
 
     if (!response.ok) {

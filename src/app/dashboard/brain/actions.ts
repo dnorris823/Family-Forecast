@@ -1,11 +1,12 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { Note } from '@/types'
 
 export async function getNotes() {
+    noStore()
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return []
@@ -22,6 +23,41 @@ export async function getNotes() {
 
     return data
 }
+
+export async function updateNote(
+    noteId: string,
+    title: string,
+    content: string,
+    isShared: boolean
+) {
+    noStore()
+    const supabase = await createClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        return { error: 'User not authenticated' }
+    }
+
+    const { data, error } = await supabase
+        .from('second_brain')
+        .update({
+            title,
+            content,
+            is_shared: isShared
+        })
+        .eq('id', noteId)
+        .eq('created_by', user.id) // Ensure user owns the note
+        .select()
+        .single()
+
+    if (error) {
+        console.error('Error updating note:', error)
+        return { error: error.message }
+    }
+
+    return { success: true, data }
+}
+
 
 async function generateEmbedding(text: string): Promise<number[]> {
     const OLLAMA_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
@@ -52,7 +88,12 @@ async function generateEmbedding(text: string): Promise<number[]> {
     }
 }
 
-export async function createNote(formData: FormData) {
+export async function createNote(
+    title: string,
+    content: string,
+    folderPath: string = '/',
+    isShared: boolean = false
+) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
@@ -70,11 +111,6 @@ export async function createNote(formData: FormData) {
         throw new Error("User hasn't joined a family yet.")
     }
 
-    const content = formData.get('content') as string
-    const isShared = formData.get('is_shared') === 'on'
-    const tagsString = formData.get('tags') as string
-    const tags = tagsString.split(',').map(t => t.trim()).filter(t => t.length > 0)
-
     // Generate Embedding
     let embedding = null
     try {
@@ -86,14 +122,15 @@ export async function createNote(formData: FormData) {
         console.warn("Skipping embedding generation")
     }
 
-    const { error } = await supabase.from('second_brain').insert({
+    const { data, error } = await supabase.from('second_brain').insert({
+        title,
         content,
+        folder_path: folderPath,
         is_shared: isShared,
-        tags,
         embedding,
-        user_id: user.id,
+        created_by: user.id,
         family_id: profile.family_id
-    })
+    }).select().single()
 
     if (error) {
         console.error('Error creating note:', error)
@@ -101,5 +138,5 @@ export async function createNote(formData: FormData) {
     }
 
     revalidatePath('/dashboard/brain')
-    return { success: true }
+    return data
 }
