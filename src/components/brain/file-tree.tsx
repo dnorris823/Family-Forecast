@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Plus, Share2, Archive, MoreHorizontal } from "lucide-react"
+import { ChevronRight, ChevronDown, Folder, FolderOpen, FileText, Plus, Share2, Archive, MoreHorizontal, FolderPlus } from "lucide-react"
 import {
     DndContext,
     DragEndEvent,
@@ -331,8 +331,8 @@ function DroppableFolder({
                             This will permanently delete the folder and all {folderNoteNames.length} note{folderNoteNames.length !== 1 ? 's' : ''} inside it:
                             {folderNoteNames.length > 0 && (
                                 <ul className="mt-2 space-y-1 text-xs">
-                                    {folderNoteNames.slice(0, 10).map(name => (
-                                        <li key={name} className="ml-2">• {name}</li>
+                                    {folderNoteNames.slice(0, 10).map((name, idx) => (
+                                        <li key={idx} className="ml-2">• {name}</li>
                                     ))}
                                     {folderNoteNames.length > 10 && (
                                         <li className="ml-2 text-muted-foreground">... and {folderNoteNames.length - 10} more</li>
@@ -522,6 +522,15 @@ export function FileTree({
                             size="icon"
                             variant="ghost"
                             className="h-6 w-6"
+                            onClick={() => onCreateFolder('/', 'New Folder')}
+                            title="New folder"
+                        >
+                            <FolderPlus className="h-3 w-3" />
+                        </Button>
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-6 w-6"
                             onClick={() => onCreateNote('/')}
                             title="New note"
                         >
@@ -553,8 +562,24 @@ export function FileTree({
                                         depth={depth}
                                         isExpanded={isExpanded}
                                         onToggle={() => toggleFolder(node.path)}
-                                        onCreateNote={onCreateNote}
-                                        onCreateFolder={onCreateFolder}
+                                        onCreateNote={(fp) => {
+                                            // Auto-expand the target folder so the new note is visible
+                                            setExpandedFolders(prev => {
+                                                const next = new Set(prev)
+                                                next.add(fp)
+                                                return next
+                                            })
+                                            onCreateNote(fp)
+                                        }}
+                                        onCreateFolder={(parentPath, name) => {
+                                            // Keep the parent expanded so the new subfolder is visible
+                                            setExpandedFolders(prev => {
+                                                const next = new Set(prev)
+                                                next.add(parentPath)
+                                                return next
+                                            })
+                                            onCreateFolder(parentPath, name)
+                                        }}
                                         onRenameFolder={onRenameFolder}
                                         onDeleteFolder={onDeleteFolder}
                                         folderNoteNames={getNoteNamesUnderFolder(node.path)}

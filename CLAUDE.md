@@ -95,6 +95,13 @@ Pages subscribe to Supabase `postgres_changes` via `useRealtimeSubscription(tabl
 - Path alias `@/` maps to `src/`
 - No Anthropic/Claude API — AI runs through local Ollama only
 
+## MCP
+- Always use MCP servers when relevant to what you are working on and available.
+
+## Git Conventions
+- When possible, Always use GitHub MCP server for anything Git.
+- Never push commits directly to GitHub. Always use add, then commit, then push.
+
 ## Git Branches
 - `main` — stable / PR target
 - `dnorris823-working` — active development branch
