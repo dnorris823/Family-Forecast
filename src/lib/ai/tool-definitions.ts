@@ -134,5 +134,22 @@ export const AI_TOOLS = [
                 required: ['title', 'content']
             }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'update_note',
+            description: 'Update an existing note in Second Brain. Provide only the fields to change.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    note_id: { type: 'string', description: 'The ID of the note to update' },
+                    title: { type: 'string', description: 'New title for the note (optional)' },
+                    content: { type: 'string', description: 'New markdown content for the note (optional)' },
+                    is_shared: { type: 'boolean', description: 'Whether to share with family (optional)' }
+                },
+                required: ['note_id']
+            }
+        }
     }
 ]

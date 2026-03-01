@@ -23,7 +23,9 @@ export function CreateNoteDialog({ onSuccess }: { onSuccess?: () => void }) {
 
     const handleSubmit = async (formData: FormData) => {
         try {
-            const result = await createNote(formData)
+            const content = formData.get('content') as string || ''
+            const isShared = formData.get('is_shared') === 'on'
+            const result = await createNote('Untitled', content, '/', isShared)
             if (result?.error) {
                 alert(`Error: ${result.error}`)
                 return
