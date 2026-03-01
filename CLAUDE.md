@@ -70,7 +70,7 @@ src/
 
 ## Database Tables (Supabase)
 | Table | Purpose |
-|-------|---------|
+|-------|--------|
 | `profiles` | User profiles with `family_id` |
 | `events` | Calendar events (family-scoped, privacy flag) |
 | `tasks` | Tasks with status/priority (todo/in_progress/done) |
