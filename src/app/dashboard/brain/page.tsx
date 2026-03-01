@@ -24,9 +24,12 @@ import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription"
 import { useMediaQuery } from "@/hooks/use-media-query"
 
 export default function SecondBrainPage() {
+    const [mounted, setMounted] = React.useState(false)
     const [notes, setNotes] = React.useState<Note[]>([])
     const [selectedNoteId, setSelectedNoteId] = React.useState<string | null>(null)
     const isMobile = useMediaQuery("(max-width: 768px)")
+
+    React.useEffect(() => { setMounted(true) }, [])
 
     // Panel collapse states (desktop only)
     const [fileTreeCollapsed, setFileTreeCollapsed] = React.useState(false)
@@ -203,6 +206,11 @@ export default function SecondBrainPage() {
     }
 
     // Desktop: react-resizable-panels three-column layout (v4 API)
+    // Panels are suppressed until mounted to avoid SSR/client style hydration mismatch
+    if (!mounted) {
+        return <div className="flex-1 h-[calc(100vh-4rem)] animate-pulse bg-muted/30 rounded-md" />
+    }
+
     return (
         <div className="flex-1 h-[calc(100vh-4rem)]">
             <PanelGroup
