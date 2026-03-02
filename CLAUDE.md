@@ -70,7 +70,7 @@ src/
 
 ## Database Tables (Supabase)
 | Table | Purpose |
-|-------|---------|
+|-------|--------|
 | `profiles` | User profiles with `family_id` |
 | `events` | Calendar events (family-scoped, privacy flag) |
 | `tasks` | Tasks with status/priority (todo/in_progress/done) |
@@ -94,6 +94,13 @@ Pages subscribe to Supabase `postgres_changes` via `useRealtimeSubscription(tabl
 - shadcn/ui components are in `src/components/ui/`; do not modify them directly unless adding a new component
 - Path alias `@/` maps to `src/`
 - No Anthropic/Claude API — AI runs through local Ollama only
+
+## MCP
+- Always use MCP servers when relevant to what you are working on and available.
+
+## Git Conventions
+- When possible, Always use GitHub MCP server for anything Git.
+- Never push commits directly to GitHub. Always use add, then commit, then push.
 
 ## Git Branches
 - `main` — stable / PR target

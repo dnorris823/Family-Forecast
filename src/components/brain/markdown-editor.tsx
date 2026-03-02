@@ -6,14 +6,19 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Save, Share2 } from "lucide-react"
+import { Save, Share2, PenLine, Eye, Columns2, Download } from "lucide-react"
 import { type Note } from "@/types"
-import "react-markdown-editor-lite/lib/index.css"
+import { exportNote } from "@/app/dashboard/brain/actions"
 
-// Dynamic import to avoid SSR issues
-const MdEditor = dynamic(() => import("react-markdown-editor-lite"), {
+// Dynamic imports to avoid SSR issues
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
     ssr: false,
     loading: () => <div className="flex items-center justify-center h-full">Loading editor...</div>
+})
+
+const MDPreview = dynamic(() => import("@uiw/react-markdown-preview"), {
+    ssr: false,
+    loading: () => <div className="flex items-center justify-center h-full">Loading preview...</div>
 })
 
 interface MarkdownEditorProps {
@@ -21,12 +26,17 @@ interface MarkdownEditorProps {
     onSave: (noteId: string, title: string, content: string, isShared: boolean) => Promise<void>
 }
 
+// viewMode maps UI label to @uiw/react-md-editor preview prop values:
+// 'edit' → edit only, 'preview' → preview only, 'live' → split (shown as "Split" in UI)
+type ViewMode = 'edit' | 'preview' | 'live'
+
 export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
     const [title, setTitle] = React.useState('')
     const [content, setContent] = React.useState('')
     const [isShared, setIsShared] = React.useState(false)
     const [isSaving, setIsSaving] = React.useState(false)
-    const saveTimeoutRef = React.useRef<NodeJS.Timeout>()
+    const [viewMode, setViewMode] = React.useState<ViewMode>('live')
+    const saveTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
 
     // Update local state when note changes
     React.useEffect(() => {
@@ -62,11 +72,6 @@ export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
         saveTimeoutRef.current = setTimeout(handleSave, 1000)
     }, [handleSave])
 
-    const handleEditorChange = ({ text }: { text: string }) => {
-        setContent(text)
-        debouncedSave()
-    }
-
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
         debouncedSave()
@@ -75,6 +80,20 @@ export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
     const handleSharedToggle = (checked: boolean) => {
         setIsShared(checked)
         debouncedSave()
+    }
+
+    const handleExport = async () => {
+        if (!note) return
+        const result = await exportNote(note.id)
+        if (!result || 'error' in result) return
+        const text = result.content.startsWith('#') ? result.content : `# ${result.title}\n\n${result.content}`
+        const blob = new Blob([text], { type: 'text/markdown' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `${result.title || 'untitled'}.md`
+        a.click()
+        URL.revokeObjectURL(url)
     }
 
     if (!note) {
@@ -106,25 +125,75 @@ export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
                             Share with family
                         </Label>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        {isSaving && (
-                            <>
-                                <Save className="h-3 w-3 animate-pulse" />
-                                <span>Saving...</span>
-                            </>
-                        )}
+                    <div className="flex items-center gap-2">
+                        {/* View mode toggle: Edit / Preview / Split */}
+                        <div className="flex border rounded-md overflow-hidden">
+                            <Button
+                                size="icon"
+                                variant={viewMode === 'edit' ? 'secondary' : 'ghost'}
+                                className="h-7 w-7 rounded-none"
+                                title="Edit mode"
+                                onClick={() => setViewMode('edit')}
+                            >
+                                <PenLine className="h-3 w-3" />
+                            </Button>
+                            <Button
+                                size="icon"
+                                variant={viewMode === 'preview' ? 'secondary' : 'ghost'}
+                                className="h-7 w-7 rounded-none border-x"
+                                title="Preview mode"
+                                onClick={() => setViewMode('preview')}
+                            >
+                                <Eye className="h-3 w-3" />
+                            </Button>
+                            <Button
+                                size="icon"
+                                variant={viewMode === 'live' ? 'secondary' : 'ghost'}
+                                className="h-7 w-7 rounded-none"
+                                title="Split view"
+                                onClick={() => setViewMode('live')}
+                            >
+                                <Columns2 className="h-3 w-3" />
+                            </Button>
+                        </div>
+                        <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7"
+                            title="Export note as .md"
+                            onClick={handleExport}
+                        >
+                            <Download className="h-3 w-3" />
+                        </Button>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            {isSaving && (
+                                <>
+                                    <Save className="h-3 w-3 animate-pulse" />
+                                    <span>Saving...</span>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className="flex-1 overflow-hidden">
-                <MdEditor
-                    value={content}
-                    style={{ height: '100%' }}
-                    renderHTML={(text) => text}
-                    onChange={handleEditorChange}
-                    view={{ menu: true, md: true, html: false }}
-                    canView={{ menu: true, md: true, html: false, both: false, fullScreen: false, hideMenu: false }}
-                />
+            {/* @uiw/react-md-editor keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+` (inline code) */}
+            <div className="flex-1 min-h-0 overflow-hidden" data-color-mode="light">
+                {viewMode === 'preview' ? (
+                    <div className="h-full overflow-y-auto">
+                        <MDPreview source={content} style={{ padding: '16px' }} />
+                    </div>
+                ) : (
+                    <MDEditor
+                        value={content}
+                        onChange={(val) => {
+                            setContent(val ?? '')
+                            debouncedSave()
+                        }}
+                        preview={viewMode}
+                        height="100%"
+                        style={{ height: '100%' }}
+                    />
+                )}
             </div>
         </div>
     )

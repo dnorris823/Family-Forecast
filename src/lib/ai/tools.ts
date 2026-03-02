@@ -46,6 +46,27 @@ export async function executeAITool(toolName: string, args: any) {
             case 'create_note':
                 return await createNote(supabase, user.id, profile.family_id, args)
 
+            case 'update_note':
+                return await updateNote(supabase, user.id, profile.family_id, args)
+
+            case 'list_folders':
+                return await listFolders(supabase, user.id, profile.family_id)
+
+            case 'move_note':
+                return await moveNote(supabase, user.id, args)
+
+            case 'rename_note':
+                return await renameNote(supabase, user.id, profile.family_id, args)
+
+            case 'rename_folder':
+                return await renameFolder(supabase, user.id, args)
+
+            case 'delete_note':
+                return await deleteNote(supabase, user.id, profile.family_id, args)
+
+            case 'delete_folder':
+                return await deleteFolder(supabase, user.id, profile.family_id, args)
+
             default:
                 return { error: `Unknown tool: ${toolName}` }
         }
@@ -132,12 +153,20 @@ async function updateTaskStatus(supabase: any, args: any) {
 async function getNotes(supabase: any, args: any) {
     let query = supabase
         .from('second_brain')
-        .select('id, title, content, is_shared, created_at')
+        .select('id, title, content, folder_path, is_shared, created_at')
         .order('created_at', { ascending: false })
         .limit(args.limit || 10)
 
     if (args.search) {
         query = query.or(`title.ilike.%${args.search}%,content.ilike.%${args.search}%`)
+    }
+
+    if (args.folder_path) {
+        if (args.folder_path === '/') {
+            query = query.or('folder_path.eq./,folder_path.is.null')
+        } else {
+            query = query.eq('folder_path', args.folder_path)
+        }
     }
 
     const { data, error } = await query
@@ -149,6 +178,7 @@ async function createNote(supabase: any, userId: string, familyId: string, args:
     const { data, error } = await supabase.from('second_brain').insert({
         title: args.title,
         content: args.content,
+        folder_path: args.folder_path || '/',
         is_shared: args.is_shared || false,
         family_id: familyId,
         created_by: userId,
@@ -157,4 +187,153 @@ async function createNote(supabase: any, userId: string, familyId: string, args:
 
     if (error) throw error
     return { success: true, note: data }
+}
+
+async function updateNote(supabase: any, userId: string, familyId: string, args: any) {
+    if (!args.note_id) return { error: 'note_id is required' }
+
+    // Build partial update object with only provided fields
+    const updates: Record<string, unknown> = {}
+    if (args.title !== undefined) updates.title = args.title
+    if (args.content !== undefined) updates.content = args.content
+    if (args.is_shared !== undefined) updates.is_shared = args.is_shared
+
+    if (Object.keys(updates).length === 0) return { error: 'No fields to update' }
+
+    const { data, error } = await supabase
+        .from('second_brain')
+        .update(updates)
+        .eq('id', args.note_id)
+        .or(`created_by.eq.${userId},and(is_shared.eq.true,family_id.eq.${familyId})`)
+        .select()
+        .single()
+
+    if (error) throw error
+    return { success: true, note: data }
+}
+
+async function listFolders(supabase: any, userId: string, familyId: string) {
+    const { data, error } = await supabase
+        .from('second_brain')
+        .select('folder_path')
+        .or(`created_by.eq.${userId},and(is_shared.eq.true,family_id.eq.${familyId})`)
+
+    if (error) throw error
+
+    // Collect all unique folder paths and their ancestors
+    const folderSet = new Set<string>(['/'])
+    for (const row of data ?? []) {
+        const fp = row.folder_path || '/'
+        if (fp !== '/') {
+            folderSet.add(fp)
+            // Add intermediate ancestor paths
+            const parts = fp.split('/').filter(Boolean)
+            for (let i = 1; i <= parts.length; i++) {
+                folderSet.add('/' + parts.slice(0, i).join('/'))
+            }
+        }
+    }
+
+    const folders = Array.from(folderSet).sort()
+    return { folders }
+}
+
+async function moveNote(supabase: any, userId: string, args: any) {
+    if (!args.note_id) return { error: 'note_id is required' }
+    if (!args.folder_path) return { error: 'folder_path is required' }
+
+    const { data, error } = await supabase
+        .from('second_brain')
+        .update({ folder_path: args.folder_path })
+        .eq('id', args.note_id)
+        .eq('created_by', userId)
+        .select()
+        .single()
+
+    if (error) throw error
+    return { success: true, note: data }
+}
+
+async function renameNote(supabase: any, userId: string, familyId: string, args: any) {
+    if (!args.note_id) return { error: 'note_id is required' }
+    if (!args.new_title) return { error: 'new_title is required' }
+
+    const { data, error } = await supabase
+        .from('second_brain')
+        .update({ title: args.new_title })
+        .eq('id', args.note_id)
+        .or(`created_by.eq.${userId},and(is_shared.eq.true,family_id.eq.${familyId})`)
+        .select()
+        .single()
+
+    if (error) throw error
+    return { success: true, note: data }
+}
+
+async function renameFolder(supabase: any, userId: string, args: any) {
+    if (!args.old_path) return { error: 'old_path is required' }
+    if (!args.new_path) return { error: 'new_path is required' }
+
+    // Fetch all creator-owned notes under the old path
+    const { data: notes, error: fetchError } = await supabase
+        .from('second_brain')
+        .select('id, folder_path')
+        .eq('created_by', userId)
+        .like('folder_path', `${args.old_path}%`)
+
+    if (fetchError) throw fetchError
+    if (!notes || notes.length === 0) return { success: true, updated: 0 }
+
+    let updated = 0
+    for (const note of notes) {
+        const newFolderPath = (note.folder_path as string).replace(args.old_path, args.new_path)
+        const { error } = await supabase
+            .from('second_brain')
+            .update({ folder_path: newFolderPath })
+            .eq('id', note.id)
+            .eq('created_by', userId)
+        if (!error) updated++
+    }
+
+    return { success: true, updated }
+}
+
+async function deleteNote(supabase: any, userId: string, familyId: string, args: any) {
+    if (!args.note_id) return { error: 'note_id is required' }
+
+    const { error } = await supabase
+        .from('second_brain')
+        .delete()
+        .eq('id', args.note_id)
+        .or(`created_by.eq.${userId},and(is_shared.eq.true,family_id.eq.${familyId})`)
+
+    if (error) throw error
+    return { success: true }
+}
+
+async function deleteFolder(supabase: any, userId: string, familyId: string, args: any) {
+    if (!args.folder_path) return { error: 'folder_path is required' }
+
+    const { data: notes, error: fetchError } = await supabase
+        .from('second_brain')
+        .select('id, title')
+        .like('folder_path', `${args.folder_path}%`)
+        .or(`created_by.eq.${userId},and(is_shared.eq.true,family_id.eq.${familyId})`)
+
+    if (fetchError) throw fetchError
+    if (!notes || notes.length === 0) return { success: true, deleted: 0 }
+
+    let deleted = 0
+    const errors: string[] = []
+    for (const note of notes) {
+        const { error } = await supabase
+            .from('second_brain')
+            .delete()
+            .eq('id', note.id)
+            .or(`created_by.eq.${userId},and(is_shared.eq.true,family_id.eq.${familyId})`)
+        if (error) errors.push(`Failed to delete "${note.title}": ${error.message}`)
+        else deleted++
+    }
+
+    return { success: true, deleted, errors }
 }

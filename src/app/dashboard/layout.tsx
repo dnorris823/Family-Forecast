@@ -1,6 +1,7 @@
 import { MainNav } from "@/components/main-nav"
 import { UserNav } from "@/components/user-nav"
 import { ChatSheet } from "@/components/chat/chat-sheet"
+import { PaletteSwitcher } from "@/components/palette-switcher"
 
 export default function DashboardLayout({
     children,
@@ -15,7 +16,8 @@ export default function DashboardLayout({
                         FamilyForecast
                     </div>
                     <MainNav />
-                    <div className="ml-auto flex items-center space-x-4">
+                    <div className="ml-auto flex items-center gap-2">
+                        <PaletteSwitcher />
                         <UserNav />
                     </div>
                 </div>

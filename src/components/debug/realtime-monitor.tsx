@@ -60,7 +60,7 @@ export function RealtimeMonitor({ table }: { table: string }) {
             .channel('broadcast-test')
             .on('broadcast', { event: 'ping' }, (payload) => {
                 console.log("[Broadcast] Received:", payload)
-                setLastEvent({ type: 'broadcast', ...payload })
+                setLastEvent({ ...payload, type: 'broadcast' })
                 setEventCount(c => c + 1)
                 setPingStatus("BROADCAST RECEIVED!")
             })
