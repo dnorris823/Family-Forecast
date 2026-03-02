@@ -67,3 +67,72 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Accent Palettes ────────────────────────────────────────────────────── */
+/* Applied via data-palette attribute on <html>.                             */
+/* Overrides --primary, --primary-foreground, --ring, --accent,              */
+/* and --accent-foreground for each palette in both light and dark modes.   */
+
+/* Ocean Blue */
+[data-palette="ocean"] {
+  --primary: 213 94% 52%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 213 94% 52%;
+  --accent: 213 50% 93%;
+  --accent-foreground: 213 60% 25%;
+}
+.dark[data-palette="ocean"] {
+  --primary: 213 80% 65%;
+  --primary-foreground: 213 50% 10%;
+  --ring: 213 80% 65%;
+  --accent: 213 35% 18%;
+  --accent-foreground: 213 60% 90%;
+}
+
+/* Sage Green */
+[data-palette="sage"] {
+  --primary: 152 45% 38%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 152 45% 38%;
+  --accent: 152 30% 92%;
+  --accent-foreground: 152 45% 20%;
+}
+.dark[data-palette="sage"] {
+  --primary: 152 45% 55%;
+  --primary-foreground: 152 30% 8%;
+  --ring: 152 45% 55%;
+  --accent: 152 25% 16%;
+  --accent-foreground: 152 40% 88%;
+}
+
+/* Warm Amber */
+[data-palette="amber"] {
+  --primary: 38 92% 45%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 38 92% 45%;
+  --accent: 38 70% 92%;
+  --accent-foreground: 38 60% 20%;
+}
+.dark[data-palette="amber"] {
+  --primary: 38 85% 60%;
+  --primary-foreground: 38 40% 8%;
+  --ring: 38 85% 60%;
+  --accent: 38 40% 16%;
+  --accent-foreground: 38 60% 90%;
+}
+
+/* Soft Rose */
+[data-palette="rose"] {
+  --primary: 340 65% 50%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 340 65% 50%;
+  --accent: 340 45% 93%;
+  --accent-foreground: 340 50% 25%;
+}
+.dark[data-palette="rose"] {
+  --primary: 340 60% 68%;
+  --primary-foreground: 340 30% 8%;
+  --ring: 340 60% 68%;
+  --accent: 340 30% 16%;
+  --accent-foreground: 340 50% 90%;
+}

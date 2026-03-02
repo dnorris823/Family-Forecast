@@ -10,6 +10,7 @@ import { CreateEventDialog } from "@/components/calendar/create-event-dialog"
 import { getEvents } from "./actions"
 import { type Event } from "@/types"
 import { getCalendarViewRange } from "@/lib/date-utils"
+import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription"
 
 export default function CalendarPage() {
     const [currentMonth, setCurrentMonth] = React.useState(new Date())
@@ -24,6 +25,9 @@ export default function CalendarPage() {
         const data = await getEvents(startDate, endDate)
         setEvents(data as unknown as Event[])
     }, [startDate, endDate]) // Dependencies for useCallback based on what getEvents uses
+
+    // Subscribe to realtime changes
+    useRealtimeSubscription('events', fetchEvents)
 
     // Fetch events when month changes
     React.useEffect(() => {

@@ -1,8 +1,19 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarDateRangePicker } from "@/components/date-range-picker"
 import { Button } from "@/components/ui/button"
+import { AtAGlance } from "@/components/dashboard/at-a-glance"
+import { getDashboardSummary } from "./dashboard-actions"
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+    const summary = await getDashboardSummary()
+
+    if ("error" in summary) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <p className="text-muted-foreground">Error loading dashboard: {summary.error}</p>
+            </div>
+        )
+    }
+
     return (
         <div className="flex-1 space-y-4">
             <div className="flex items-center justify-between space-y-2">
@@ -12,33 +23,18 @@ export default function DashboardPage() {
                     <Button>Download</Button>
                 </div>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Upcoming Events
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">3</div>
-                        <p className="text-xs text-muted-foreground">
-                            +1 from last week
-                        </p>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
-                            Active Tasks
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">12</div>
-                        <p className="text-xs text-muted-foreground">
-                            4 high priority
-                        </p>
-                    </CardContent>
-                </Card>
+
+            {/* Real data widget */}
+            <AtAGlance data={summary} />
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                {/* Space for future widgets or analytics */}
+                <div className="md:col-span-4 h-40 rounded-lg border border-dashed flex items-center justify-center">
+                    <p className="text-sm text-muted-foreground">Future Analytics Chart</p>
+                </div>
+                <div className="md:col-span-3 h-40 rounded-lg border border-dashed flex items-center justify-center">
+                    <p className="text-sm text-muted-foreground">Family Activity Feed</p>
+                </div>
             </div>
         </div>
     )

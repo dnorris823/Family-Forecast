@@ -41,6 +41,9 @@ yarn-error.log*
 /supabase/.branches
 /supabase/.temp
 
+# playwright MCP screenshots
+/.playwright-mcp/screenshots/
+
 # editors
 .vscode/
 .idea/

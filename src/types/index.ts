@@ -46,10 +46,12 @@ export type Task = {
 
 export type Note = {
     id: string
+    title: string | null
     content: string
+    folder_path: string
     tags: string[] | null
     is_shared: boolean
-    user_id: string
+    created_by: string
     family_id: string
     created_at: string
 }
