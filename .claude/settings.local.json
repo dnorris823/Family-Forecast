@@ -28,7 +28,8 @@
       "mcp__playwright__browser_evaluate",
       "mcp__github__create_pull_request",
       "mcp__github__search_repositories",
-      "mcp__github__get_file_contents"
+      "mcp__github__get_file_contents",
+      "mcp__playwright__browser_resize"
     ]
   }
 }

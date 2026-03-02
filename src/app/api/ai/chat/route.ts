@@ -28,7 +28,7 @@ Respect user privacy - only access data the user is allowed to see.`
 
         // 3. Call Ollama with tools
         const OLLAMA_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
-        const selectedModel = model || 'llama3.1'
+        const selectedModel = model || 'kimi-k2.5:cloud'
 
         const conversationMessages = [
             { role: 'system', content: systemPrompt },

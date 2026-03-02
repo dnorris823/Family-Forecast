@@ -27,7 +27,7 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
     const [streamingContent, setStreamingContent] = React.useState("")
     const [lastError, setLastError] = React.useState(false)
     const [models, setModels] = React.useState<string[]>([])
-    const [selectedModel, setSelectedModel] = React.useState<string>('llama3.1')
+    const [selectedModel, setSelectedModel] = React.useState<string>('kimi-k2.5:cloud')
     const scrollAreaRef = React.useRef<HTMLDivElement>(null)
 
     // Fetch available models on mount
@@ -37,8 +37,8 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
             .then(data => {
                 const modelNames = data.models?.map((m: { name: string }) => m.name) || []
                 setModels(modelNames)
-                if (modelNames.includes('llama3.1')) {
-                    setSelectedModel('llama3.1')
+                if (modelNames.includes('kimi-k2.5:cloud')) {
+                    setSelectedModel('kimi-k2.5:cloud')
                 } else if (modelNames.length > 0) {
                     setSelectedModel(modelNames[0])
                 }

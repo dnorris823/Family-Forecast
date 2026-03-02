@@ -10,10 +10,15 @@ import { Save, Share2, PenLine, Eye, Columns2, Download } from "lucide-react"
 import { type Note } from "@/types"
 import { exportNote } from "@/app/dashboard/brain/actions"
 
-// Dynamic import to avoid SSR issues
+// Dynamic imports to avoid SSR issues
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
     ssr: false,
     loading: () => <div className="flex items-center justify-center h-full">Loading editor...</div>
+})
+
+const MDPreview = dynamic(() => import("@uiw/react-markdown-preview"), {
+    ssr: false,
+    loading: () => <div className="flex items-center justify-center h-full">Loading preview...</div>
 })
 
 interface MarkdownEditorProps {
@@ -172,17 +177,23 @@ export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
                 </div>
             </div>
             {/* @uiw/react-md-editor keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+` (inline code) */}
-            <div className="flex-1 overflow-hidden" data-color-mode="light">
-                <MDEditor
-                    value={content}
-                    onChange={(val) => {
-                        setContent(val ?? '')
-                        debouncedSave()
-                    }}
-                    preview={viewMode}
-                    height="100%"
-                    style={{ height: '100%' }}
-                />
+            <div className="flex-1 min-h-0 overflow-hidden" data-color-mode="light">
+                {viewMode === 'preview' ? (
+                    <div className="h-full overflow-y-auto">
+                        <MDPreview source={content} style={{ padding: '16px' }} />
+                    </div>
+                ) : (
+                    <MDEditor
+                        value={content}
+                        onChange={(val) => {
+                            setContent(val ?? '')
+                            debouncedSave()
+                        }}
+                        preview={viewMode}
+                        height="100%"
+                        style={{ height: '100%' }}
+                    />
+                )}
             </div>
         </div>
     )

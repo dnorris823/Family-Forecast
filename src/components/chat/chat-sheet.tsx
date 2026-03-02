@@ -17,7 +17,7 @@ export function ChatSheet() {
     ])
     const [isLoading, setIsLoading] = React.useState(false)
     const [models, setModels] = React.useState<string[]>([])
-    const [selectedModel, setSelectedModel] = React.useState<string>('llama3.1')
+    const [selectedModel, setSelectedModel] = React.useState<string>('kimi-k2.5:cloud')
 
     // Fetch available models when sheet opens
     React.useEffect(() => {
@@ -28,8 +28,8 @@ export function ChatSheet() {
                     const modelNames = data.models?.map((m: any) => m.name) || []
                     setModels(modelNames)
                     // Set default if available
-                    if (modelNames.includes('llama3.1')) {
-                        setSelectedModel('llama3.1')
+                    if (modelNames.includes('kimi-k2.5:cloud')) {
+                        setSelectedModel('kimi-k2.5:cloud')
                     } else if (modelNames.length > 0) {
                         setSelectedModel(modelNames[0])
                     }

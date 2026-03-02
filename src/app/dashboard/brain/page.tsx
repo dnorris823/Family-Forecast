@@ -164,16 +164,17 @@ export default function SecondBrainPage() {
     const savedLayout = React.useMemo(() => getSavedLayout(), [])
 
     // Mobile: Use tabs
+    // h-[calc(100dvh-7.5rem)]: viewport minus nav (4rem) minus content padding-top (1.5rem) minus content padding-bottom (2rem)
     if (isMobile) {
         return (
-            <div className="flex-1 h-full">
-                <Tabs defaultValue="notes" className="h-full flex flex-col">
-                    <TabsList className="w-full">
+            <div className="flex flex-col overflow-hidden h-[calc(100dvh-7.5rem)]">
+                <Tabs defaultValue="notes" className="flex-1 flex flex-col min-h-0">
+                    <TabsList className="w-full shrink-0">
                         <TabsTrigger value="notes" className="flex-1">Notes</TabsTrigger>
                         <TabsTrigger value="editor" className="flex-1">Editor</TabsTrigger>
                         <TabsTrigger value="ai" className="flex-1">AI</TabsTrigger>
                     </TabsList>
-                    <TabsContent value="notes" className="flex-1 overflow-hidden">
+                    <TabsContent value="notes" className="flex-1 min-h-0 overflow-hidden">
                         <FileTree
                             notes={notes}
                             selectedNoteId={selectedNoteId}
@@ -189,10 +190,10 @@ export default function SecondBrainPage() {
                             onExportAll={handleExportAll}
                         />
                     </TabsContent>
-                    <TabsContent value="editor" className="flex-1 overflow-hidden">
+                    <TabsContent value="editor" className="flex-1 min-h-0 overflow-hidden">
                         <MarkdownEditor note={selectedNote} onSave={handleSaveNote} />
                     </TabsContent>
-                    <TabsContent value="ai" className="flex-1 overflow-hidden">
+                    <TabsContent value="ai" className="flex-1 min-h-0 overflow-hidden">
                         <BrainChatPanel
                             currentNote={selectedNote}
                             activeNoteId={selectedNoteId}
