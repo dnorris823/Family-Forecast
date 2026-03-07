@@ -268,7 +268,7 @@ export function ChatSheet() {
                                                 <Bot className="h-3 w-3 text-white dark:text-[#111]" />
                                             </div>
                                             <div className={cn(
-                                                "flex-1 min-w-0 overflow-hidden text-sm text-[#111] dark:text-white/85",
+                                                "flex-1 min-w-0 text-sm text-[#111] dark:text-white/85",
                                                 "bg-[#f0f0f0] dark:bg-white/[0.07] rounded-2xl rounded-tl-sm px-4 py-3",
                                                 "prose prose-sm dark:prose-invert max-w-none break-words",
                                                 "prose-p:my-1.5 prose-p:leading-relaxed",
