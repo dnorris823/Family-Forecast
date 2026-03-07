@@ -6,7 +6,6 @@ import { Panel, Group as PanelGroup, Separator as PanelResizeHandle, usePanelRef
 import { FolderOpen, Bot, X } from "lucide-react"
 import { FileTree } from "@/components/brain/file-tree"
 import { MarkdownEditor } from "@/components/brain/markdown-editor"
-import { BrainChatPanel } from "@/components/brain/brain-chat-panel"
 import {
     getNotes,
     createNote,
@@ -46,9 +45,7 @@ export default function SecondBrainPage() {
 
     // Panel collapse states (desktop only)
     const [fileTreeCollapsed, setFileTreeCollapsed] = React.useState(false)
-    const [aiCollapsed, setAiCollapsed] = React.useState(false)
     const fileTreePanelRef = usePanelRef()
-    const aiPanelRef = usePanelRef()
 
     const selectedNote = React.useMemo(
         () => notes.find(n => n.id === selectedNoteId) || null,
@@ -264,7 +261,6 @@ export default function SecondBrainPage() {
                     <TabsList className="h-auto w-full shrink-0 rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.06]">
                         <TabsTrigger value="notes" className="flex-1 rounded-full py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40">Notes</TabsTrigger>
                         <TabsTrigger value="editor" className="flex-1 rounded-full py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40">Editor</TabsTrigger>
-                        <TabsTrigger value="ai" className="flex-1 rounded-full py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40">AI</TabsTrigger>
                     </TabsList>
                     <TabsContent value="notes" className="flex-1 min-h-0 overflow-hidden">
                         <FileTree
@@ -284,14 +280,6 @@ export default function SecondBrainPage() {
                     </TabsContent>
                     <TabsContent value="editor" className="flex-1 min-h-0 overflow-hidden">
                         <MarkdownEditor note={selectedNote} onSave={handleSaveNote} />
-                    </TabsContent>
-                    <TabsContent forceMount value="ai" className="flex-1 min-h-0 overflow-hidden data-[state=inactive]:hidden">
-                        <BrainChatPanel
-                            currentNote={selectedNote}
-                            activeNoteId={selectedNoteId}
-                            onNoteCreated={fetchNotes}
-                            onNoteUpdated={fetchNotes}
-                        />
                     </TabsContent>
                 </Tabs>
             </div>
@@ -366,44 +354,8 @@ export default function SecondBrainPage() {
                 <PanelResizeHandle className="w-px bg-gray-100 transition-colors hover:bg-gray-300 dark:bg-white/[0.05] dark:hover:bg-white/10" />
 
                 {/* Markdown editor panel */}
-                <Panel id="editor" defaultSize="55%" minSize="30%">
+                <Panel id="editor" defaultSize="80%" minSize="30%">
                     <MarkdownEditor note={selectedNote} onSave={handleSaveNote} />
-                </Panel>
-
-                <PanelResizeHandle className="w-px bg-gray-100 transition-colors hover:bg-gray-300 dark:bg-white/[0.05] dark:hover:bg-white/10" />
-
-                {/* AI chat panel */}
-                <Panel
-                    id="ai-chat"
-                    panelRef={aiPanelRef}
-                    defaultSize="25%"
-                    minSize="10%"
-                    collapsible={true}
-                    collapsedSize="3%"
-                    onResize={(size) => {
-                        const isNowCollapsed = size.asPercentage <= 4
-                        setAiCollapsed(prev => {
-                            if (prev !== isNowCollapsed) return isNowCollapsed
-                            return prev
-                        })
-                    }}
-                >
-                    {aiCollapsed ? (
-                        <div
-                            className="flex h-full cursor-pointer flex-col items-center justify-start border-l border-gray-100 pt-4 transition-colors hover:bg-gray-50 dark:border-white/[0.05] dark:hover:bg-white/[0.02]"
-                            onClick={() => aiPanelRef.current?.expand()}
-                            title="Expand AI chat"
-                        >
-                            <Bot className="h-4 w-4 text-gray-400 dark:text-white/30" />
-                        </div>
-                    ) : (
-                        <BrainChatPanel
-                            currentNote={selectedNote}
-                            activeNoteId={selectedNoteId}
-                            onNoteCreated={fetchNotes}
-                            onNoteUpdated={fetchNotes}
-                        />
-                    )}
                 </Panel>
             </PanelGroup>
         </div>

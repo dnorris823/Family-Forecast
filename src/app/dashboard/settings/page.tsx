@@ -17,10 +17,12 @@ import {
 } from "@/components/ui/alert-dialog"
 import { ArrowUpRight, RotateCcw } from "lucide-react"
 import { resetBrainDefaults } from "@/app/dashboard/brain/actions"
+import { useAIModel } from "@/hooks/use-ai-model"
 
 export default function SettingsPage() {
     const [resetStatus, setResetStatus] = React.useState<string | null>(null)
     const [isResetting, setIsResetting] = React.useState(false)
+    const { selectedModel, setSelectedModel, models, isLoading: modelsLoading } = useAIModel()
 
     const handleReset = async () => {
         setIsResetting(true)
@@ -132,6 +134,46 @@ export default function SettingsPage() {
 
                     {/* AI Rules */}
                     <TabsContent value="ai" className="space-y-4">
+                        {/* AI Model */}
+                        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:bg-[#111]">
+                            <div className="border-b border-gray-100 px-6 py-5 dark:border-white/[0.04]">
+                                <p className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                    AI Model
+                                </p>
+                                <p className="mt-0.5 text-sm text-gray-500 dark:text-white/40">
+                                    Select which Ollama model to use across all AI chat surfaces.
+                                </p>
+                            </div>
+                            <div className="px-6 py-5">
+                                {modelsLoading ? (
+                                    <p className="text-sm text-gray-400 dark:text-white/30">Loading models…</p>
+                                ) : models.length === 0 ? (
+                                    <p className="text-sm text-gray-400 dark:text-white/30">
+                                        No models found. Make sure Ollama is running.
+                                    </p>
+                                ) : (
+                                    <div className="space-y-1.5">
+                                        <Label className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                            Active Model
+                                        </Label>
+                                        <select
+                                            value={selectedModel}
+                                            onChange={e => setSelectedModel(e.target.value)}
+                                            className="w-full rounded-xl border border-gray-200 bg-[#f8f8f8] px-3 py-2 text-sm text-[#111] focus:outline-none focus:ring-1 focus:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus:ring-white/20"
+                                        >
+                                            {models.map(model => (
+                                                <option key={model} value={model}>{model}</option>
+                                            ))}
+                                        </select>
+                                        <p className="text-xs text-gray-400 dark:text-white/30">
+                                            Saved automatically. Takes effect immediately in all chat panels.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* AI Behavior */}
                         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:bg-[#111]">
                             <div className="border-b border-gray-100 px-6 py-5 dark:border-white/[0.04]">
                                 <p className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
