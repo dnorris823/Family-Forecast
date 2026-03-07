@@ -136,3 +136,107 @@
   --accent: 340 30% 16%;
   --accent-foreground: 340 50% 90%;
 }
+
+/* ── Awakee Light Theme ─────────────────────────────────────────────────── */
+/* Applied via .awakee class on a wrapper element.                           */
+/* Light-first: white bg, near-black text, rounder radius.                  */
+
+.awakee {
+  color-scheme: light;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 7%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7%;
+  --primary: 0 0% 7%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 20%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 7%;
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 0 0% 7%;
+  --radius: 1rem;
+}
+
+/* Roboto Mono utility */
+.font-mono-ui {
+  font-family: var(--font-mono, 'Roboto Mono', ui-monospace, monospace);
+}
+
+/* Playfair Display italic utility */
+.font-display {
+  font-family: var(--font-display, Georgia, serif);
+  font-style: italic;
+}
+
+/* Awakee card hover: subtle lift */
+.awakee-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.awakee-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Awakee pill nav active item */
+.awakee-nav-pill {
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* ── Awakee Dark Mode ───────────────────────────────────────────────────── */
+/* Applies when next-themes adds .dark to <html> and .awakee is on the      */
+/* dashboard wrapper div. Also covers the login page via .dark directly.    */
+
+/* ── @uiw/react-md-editor: neutralise GitHub Primer blue dark vars ──────── */
+/* The library's dark theme uses GitHub's blue-black palette. Override with  */
+/* Awakee's neutral #111 black. Scoped to .awakee so it only fires on our   */
+/* dashboard wrapper, not globally.                                           */
+
+.awakee [data-color-mode="dark"] .wmde-markdown,
+.awakee [data-color-mode="dark"] .wmde-markdown-var {
+  --color-canvas-default: #111;
+  --color-canvas-subtle: #1a1a1a;
+  --color-fg-default: rgba(255, 255, 255, 0.87);
+  --color-fg-muted: rgba(255, 255, 255, 0.40);
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-muted: rgba(255, 255, 255, 0.05);
+  --color-neutral-muted: rgba(255, 255, 255, 0.06);
+  --color-accent-fg: rgba(255, 255, 255, 0.70);
+  --color-accent-emphasis: rgba(255, 255, 255, 0.12);
+  --color-prettylights-syntax-markup-heading: rgba(255, 255, 255, 0.80);
+}
+
+/* ── Awakee Dark Mode ───────────────────────────────────────────────────── */
+/* Applies when next-themes adds .dark to <html> and .awakee is on the      */
+/* dashboard wrapper div. Also covers the login page via .dark directly.    */
+
+.dark .awakee {
+  color-scheme: dark;
+  --background: 0 0% 7%;
+  --foreground: 0 0% 95%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 95%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 0 0% 95%;
+  --primary-foreground: 0 0% 7%;
+  --secondary: 0 0% 13%;
+  --secondary-foreground: 0 0% 70%;
+  --muted: 0 0% 13%;
+  --muted-foreground: 0 0% 48%;
+  --accent: 0 0% 13%;
+  --accent-foreground: 0 0% 95%;
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 0 0% 95%;
+  --radius: 1rem;
+}

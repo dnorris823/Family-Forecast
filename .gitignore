@@ -43,6 +43,7 @@ yarn-error.log*
 
 # playwright MCP screenshots
 /.playwright-mcp/screenshots/
+/screenshots/
 
 # editors
 .vscode/

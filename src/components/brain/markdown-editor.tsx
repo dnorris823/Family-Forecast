@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import dynamic from "next/dynamic"
+import { useTheme } from "next-themes"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -31,12 +32,16 @@ interface MarkdownEditorProps {
 type ViewMode = 'edit' | 'preview' | 'live'
 
 export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
+    const { resolvedTheme } = useTheme()
+    const [mounted, setMounted] = React.useState(false)
     const [title, setTitle] = React.useState('')
     const [content, setContent] = React.useState('')
     const [isShared, setIsShared] = React.useState(false)
     const [isSaving, setIsSaving] = React.useState(false)
     const [viewMode, setViewMode] = React.useState<ViewMode>('live')
     const saveTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
+
+    React.useEffect(() => { setMounted(true) }, [])
 
     // Update local state when note changes
     React.useEffect(() => {
@@ -177,7 +182,7 @@ export function MarkdownEditor({ note, onSave }: MarkdownEditorProps) {
                 </div>
             </div>
             {/* @uiw/react-md-editor keyboard shortcuts: Ctrl+B (bold), Ctrl+I (italic), Ctrl+` (inline code) */}
-            <div className="flex-1 min-h-0 overflow-hidden" data-color-mode="light">
+            <div className="flex-1 min-h-0 overflow-hidden" data-color-mode={mounted && resolvedTheme === 'dark' ? 'dark' : 'light'}>
                 {viewMode === 'preview' ? (
                     <div className="h-full overflow-y-auto">
                         <MDPreview source={content} style={{ padding: '16px' }} />

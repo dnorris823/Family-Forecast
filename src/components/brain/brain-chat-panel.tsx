@@ -6,8 +6,9 @@ import remarkGfm from "remark-gfm"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Send, Bot, User, RotateCcw } from "lucide-react"
+import { Send, Bot, User, RotateCcw, SquarePen } from "lucide-react"
 import { streamChatWithAI, type Message } from "@/lib/ai/client"
+import { getAIName } from "@/app/dashboard/brain/actions"
 import { cn } from "@/lib/utils"
 import { type Note } from "@/types"
 
@@ -20,9 +21,8 @@ interface BrainChatPanelProps {
 
 export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNoteUpdated }: BrainChatPanelProps) {
     const [input, setInput] = React.useState("")
-    const [messages, setMessages] = React.useState<Message[]>([
-        { role: 'assistant', content: "Hi! I can help you with your notes, tasks, and calendar. Ask me anything!" }
-    ])
+    const [aiName, setAiName] = React.useState<string | null>(null)
+    const [messages, setMessages] = React.useState<Message[]>([])
     const [isLoading, setIsLoading] = React.useState(false)
     const [streamingContent, setStreamingContent] = React.useState("")
     const [lastError, setLastError] = React.useState(false)
@@ -30,8 +30,16 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
     const [selectedModel, setSelectedModel] = React.useState<string>('kimi-k2.5:cloud')
     const scrollAreaRef = React.useRef<HTMLDivElement>(null)
 
-    // Fetch available models on mount
+    // Fetch AI name and available models on mount
     React.useEffect(() => {
+        getAIName().then(name => {
+            setAiName(name)
+            const displayName = name ?? 'Assistant'
+            setMessages([{ role: 'assistant', content: `Hi! I'm ${displayName}. I can help you with your notes, tasks, and calendar.` }])
+        }).catch(() => {
+            setMessages([{ role: 'assistant', content: "Hi! I can help you with your notes, tasks, and calendar. Ask me anything!" }])
+        })
+
         fetch('/api/ai/models')
             .then(res => res.json())
             .then(data => {
@@ -128,26 +136,47 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
         setInput(question)
     }
 
+    const handleNewConversation = () => {
+        if (isLoading) return
+        const displayName = aiName ?? 'Assistant'
+        setMessages([{ role: 'assistant', content: `Hi! I'm ${displayName}. I can help you with your notes, tasks, and calendar.` }])
+        setStreamingContent("")
+        setLastError(false)
+        setInput("")
+    }
+
     return (
         <div className="flex flex-col h-full border-l">
             <div className="p-3 border-b space-y-2">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <Bot className="h-4 w-4 text-primary" />
-                        <h3 className="font-semibold text-sm">AI Assistant</h3>
+                <div className="flex items-center gap-2">
+                    <Bot className="h-4 w-4 text-primary shrink-0" />
+                    <div className="flex flex-col min-w-0 flex-1">
+                        <h3 className="font-semibold text-sm leading-tight truncate">
+                            {aiName ?? 'Assistant'}
+                        </h3>
+                        {models.length > 0 && (
+                            <select
+                                value={selectedModel}
+                                onChange={(e) => setSelectedModel(e.target.value)}
+                                className="border-0 bg-transparent p-0 text-[10px] text-muted-foreground focus:outline-none disabled:opacity-50"
+                                disabled={isLoading}
+                            >
+                                {models.map(model => (
+                                    <option key={model} value={model}>{model}</option>
+                                ))}
+                            </select>
+                        )}
                     </div>
-                    {models.length > 0 && (
-                        <select
-                            value={selectedModel}
-                            onChange={(e) => setSelectedModel(e.target.value)}
-                            className="text-xs border rounded px-2 py-1 bg-background"
-                            disabled={isLoading}
-                        >
-                            {models.map(model => (
-                                <option key={model} value={model}>{model}</option>
-                            ))}
-                        </select>
-                    )}
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-7 w-7 shrink-0"
+                        onClick={handleNewConversation}
+                        disabled={isLoading}
+                        title="New conversation"
+                    >
+                        <SquarePen className="h-3.5 w-3.5" />
+                    </Button>
                 </div>
                 {currentNote && (
                     <Button
