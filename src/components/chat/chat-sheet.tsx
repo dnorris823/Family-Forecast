@@ -3,7 +3,8 @@
 import * as React from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Bot, Send, ArrowUpRight, X, Settings } from "lucide-react"
 import { chatWithAI, type Message } from "@/lib/ai/client"
@@ -185,6 +186,10 @@ export function ChatSheet() {
                 style={{ width: sheetWidth, maxWidth: sheetWidth }}
                 className="flex flex-col gap-0 border-l border-gray-100 bg-white p-0 dark:border-white/[0.06] dark:bg-[#111]"
             >
+                <VisuallyHidden.Root>
+                    <SheetTitle>AI Chat</SheetTitle>
+                </VisuallyHidden.Root>
+
                 {/* Left-edge resize handle */}
                 <div
                     className="absolute left-0 top-0 z-20 h-full w-2 cursor-col-resize group"
