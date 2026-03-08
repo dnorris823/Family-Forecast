@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { AI_TOOLS } from '@/lib/ai/tool-definitions'
 import { executeAITool } from '@/lib/ai/tools'
+import { getAIOptions } from '@/app/dashboard/ai/actions'
 import { createClient } from '@/lib/supabase/server'
 import { addDays } from 'date-fns'
 
@@ -27,11 +28,26 @@ ${context}
 
 You have access to tools to read and modify data. Always fetch fresh data before answering questions about current state.
 When creating or updating items, confirm the action was successful.
-Respect user privacy - only access data the user is allowed to see.${aiMemoryContext ? `\n\n## Persistent AI Memory\n${aiMemoryContext}` : ''}`
+Respect user privacy - only access data the user is allowed to see.
+
+When you receive image_search results, output them as a fenced code block with language "image-results" containing ONLY the JSON results array. Example:
+\`\`\`image-results
+[{"title":"Example","thumbnail":"https://...","url":"https://...","source":"example.com"}]
+\`\`\`
+When you receive video_search results, do the same with language "video-results":
+\`\`\`video-results
+[{"title":"Example","thumbnail":"https://...","url":"https://...","source":"youtube.com","description":"...","age":"..."}]
+\`\`\`
+Always include a brief text line before the code block describing what you found.${aiMemoryContext ? `\n\n## Persistent AI Memory\n${aiMemoryContext}` : ''}`
 
         // 4. Call Ollama with tools
         const OLLAMA_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
         const selectedModel = model || 'kimi-k2.5:cloud'
+        const aiOptions = await getAIOptions()
+        const ollamaOptions = {
+            temperature: aiOptions.temperature,
+            ...(aiOptions.num_ctx ? { num_ctx: aiOptions.num_ctx } : {})
+        }
 
         const conversationMessages = [
             { role: 'system', content: systemPrompt },
@@ -52,6 +68,7 @@ Respect user privacy - only access data the user is allowed to see.${aiMemoryCon
                     model: selectedModel,
                     messages: conversationMessages,
                     tools: AI_TOOLS,
+                    options: ollamaOptions,
                     stream: false
                 })
             })
@@ -97,6 +114,7 @@ Respect user privacy - only access data the user is allowed to see.${aiMemoryCon
                     body: JSON.stringify({
                         model: selectedModel,
                         messages: conversationMessages,
+                        options: ollamaOptions,
                         stream: true
                     })
                 })

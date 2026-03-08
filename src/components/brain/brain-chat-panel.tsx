@@ -19,6 +19,7 @@ import {
 } from "@/app/dashboard/ai/actions"
 import { useAIModel } from "@/hooks/use-ai-model"
 import { ChatHistoryList } from "@/components/chat/chat-history-list"
+import { markdownComponents } from "@/components/chat/markdown-components"
 import { cn } from "@/lib/utils"
 import { type Note } from "@/types"
 
@@ -267,7 +268,7 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                                             : "bg-muted prose prose-sm dark:prose-invert max-w-none"
                                     )}>
                                         {m.role === 'assistant' ? (
-                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                            <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                                                 {m.content}
                                             </ReactMarkdown>
                                         ) : (
@@ -286,7 +287,7 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                                     <div className="p-2 rounded-lg bg-muted prose prose-sm dark:prose-invert max-w-none">
                                         {streamingContent ? (
                                             <>
-                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                                                     {streamingContent}
                                                 </ReactMarkdown>
                                                 <span className="inline-block w-1 h-3 bg-current animate-pulse ml-0.5 align-middle" />

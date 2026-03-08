@@ -18,11 +18,53 @@ import {
 import { ArrowUpRight, RotateCcw } from "lucide-react"
 import { resetBrainDefaults } from "@/app/dashboard/brain/actions"
 import { useAIModel } from "@/hooks/use-ai-model"
+import { getBraveApiKey, saveBraveApiKey, getAIOptions, saveAIOptions } from "@/app/dashboard/ai/actions"
 
 export default function SettingsPage() {
     const [resetStatus, setResetStatus] = React.useState<string | null>(null)
     const [isResetting, setIsResetting] = React.useState(false)
     const { selectedModel, setSelectedModel, models, isLoading: modelsLoading } = useAIModel()
+
+    const [braveKey, setBraveKey] = React.useState('')
+    const [braveKeySaving, setBraveKeySaving] = React.useState(false)
+    const [braveKeyStatus, setBraveKeyStatus] = React.useState<string | null>(null)
+    const [braveKeyLoaded, setBraveKeyLoaded] = React.useState(false)
+
+    const [aiTemp, setAiTemp] = React.useState(0.7)
+    const [aiNumCtx, setAiNumCtx] = React.useState<number | null>(null)
+    const [aiOptionsSaving, setAiOptionsSaving] = React.useState(false)
+    const [aiOptionsStatus, setAiOptionsStatus] = React.useState<string | null>(null)
+
+    React.useEffect(() => {
+        getBraveApiKey().then(key => {
+            if (key) setBraveKey(key)
+            setBraveKeyLoaded(true)
+        })
+        getAIOptions().then(opts => {
+            setAiTemp(opts.temperature)
+            setAiNumCtx(opts.num_ctx)
+        })
+    }, [])
+
+    const handleSaveAIOptions = async () => {
+        setAiOptionsSaving(true)
+        setAiOptionsStatus(null)
+        const result = await saveAIOptions(aiTemp, aiNumCtx)
+        setAiOptionsSaving(false)
+        setAiOptionsStatus(result.error ? `Error: ${result.error}` : 'Saved.')
+    }
+
+    const handleSaveBraveKey = async () => {
+        setBraveKeySaving(true)
+        setBraveKeyStatus(null)
+        const result = await saveBraveApiKey(braveKey)
+        setBraveKeySaving(false)
+        if (result.error) {
+            setBraveKeyStatus(`Error: ${result.error}`)
+        } else {
+            setBraveKeyStatus(braveKey ? 'API key saved.' : 'API key cleared.')
+        }
+    }
 
     const handleReset = async () => {
         setIsResetting(true)
@@ -69,6 +111,12 @@ export default function SettingsPage() {
                             className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                         >
                             AI Rules
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="integrations"
+                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                        >
+                            Integrations
                         </TabsTrigger>
                     </TabsList>
 
@@ -173,6 +221,80 @@ export default function SettingsPage() {
                             </div>
                         </div>
 
+                        {/* AI Parameters */}
+                        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:bg-[#111]">
+                            <div className="border-b border-gray-100 px-6 py-5 dark:border-white/[0.04]">
+                                <p className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                    AI Parameters
+                                </p>
+                                <p className="mt-0.5 text-sm text-gray-500 dark:text-white/40">
+                                    Tune how the model generates responses.
+                                </p>
+                            </div>
+                            <div className="space-y-5 px-6 py-6">
+                                {/* Temperature */}
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <Label className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                            Creativity (Temperature)
+                                        </Label>
+                                        <span className="font-mono-ui text-xs text-gray-500 dark:text-white/40">
+                                            {aiTemp.toFixed(2)}
+                                        </span>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min={0}
+                                        max={1}
+                                        step={0.05}
+                                        value={aiTemp}
+                                        onChange={e => setAiTemp(parseFloat(e.target.value))}
+                                        className="w-full accent-[#111] dark:accent-white"
+                                    />
+                                    <div className="flex justify-between text-[10px] text-gray-300 dark:text-white/20">
+                                        <span>Precise</span>
+                                        <span>Creative</span>
+                                    </div>
+                                </div>
+
+                                {/* Context Window */}
+                                <div className="space-y-1.5">
+                                    <Label className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                        Context Window
+                                    </Label>
+                                    <select
+                                        value={aiNumCtx ?? ''}
+                                        onChange={e => setAiNumCtx(e.target.value ? parseInt(e.target.value) : null)}
+                                        className="w-full rounded-xl border border-gray-200 bg-[#f8f8f8] px-3 py-2 text-sm text-[#111] focus:outline-none focus:ring-1 focus:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus:ring-white/20"
+                                    >
+                                        <option value="">Model default</option>
+                                        <option value="2048">2,048 tokens</option>
+                                        <option value="4096">4,096 tokens</option>
+                                        <option value="8192">8,192 tokens</option>
+                                        <option value="16384">16,384 tokens</option>
+                                        <option value="32768">32,768 tokens</option>
+                                    </select>
+                                    <p className="text-xs text-gray-400 dark:text-white/30">
+                                        How much conversation history the model can hold at once. Higher values use more memory.
+                                    </p>
+                                </div>
+
+                                {aiOptionsStatus && (
+                                    <p className="text-sm text-gray-600 dark:text-white/60">{aiOptionsStatus}</p>
+                                )}
+                                <button
+                                    onClick={handleSaveAIOptions}
+                                    disabled={aiOptionsSaving}
+                                    className="flex items-center gap-3 rounded-full bg-[#111] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80 disabled:opacity-40 dark:bg-white dark:text-[#111]"
+                                >
+                                    {aiOptionsSaving ? 'Saving…' : 'Save Parameters'}
+                                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">
+                                        <ArrowUpRight className="h-3 w-3" />
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
                         {/* AI Behavior */}
                         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:bg-[#111]">
                             <div className="border-b border-gray-100 px-6 py-5 dark:border-white/[0.04]">
@@ -233,6 +355,61 @@ export default function SettingsPage() {
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
+                            </div>
+                        </div>
+                    </TabsContent>
+                    {/* Integrations */}
+                    <TabsContent value="integrations" className="space-y-4">
+                        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:bg-[#111]">
+                            <div className="border-b border-gray-100 px-6 py-5 dark:border-white/[0.04]">
+                                <p className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                    Web Search
+                                </p>
+                                <p className="mt-0.5 text-sm text-gray-500 dark:text-white/40">
+                                    Enable the AI assistant to search the web using Brave Search.
+                                </p>
+                            </div>
+                            <div className="space-y-4 px-6 py-6">
+                                {!braveKeyLoaded ? (
+                                    <p className="text-sm text-gray-400 dark:text-white/30">Loading…</p>
+                                ) : (
+                                    <>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`h-2 w-2 rounded-full ${braveKey ? 'bg-green-500' : 'bg-gray-300 dark:bg-white/20'}`} />
+                                            <span className="text-sm text-gray-500 dark:text-white/40">
+                                                {braveKey ? 'Web search is active.' : 'Not configured.'}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <Label className="font-mono-ui text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30">
+                                                Brave Search API Key
+                                            </Label>
+                                            <Input
+                                                type="password"
+                                                value={braveKey}
+                                                onChange={e => setBraveKey(e.target.value)}
+                                                placeholder="BSA..."
+                                                className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-white/20"
+                                            />
+                                            <p className="text-xs text-gray-400 dark:text-white/30">
+                                                Get a free key at brave.com/search/api — leave blank to disable web search.
+                                            </p>
+                                        </div>
+                                        {braveKeyStatus && (
+                                            <p className="text-sm text-gray-600 dark:text-white/60">{braveKeyStatus}</p>
+                                        )}
+                                        <button
+                                            onClick={handleSaveBraveKey}
+                                            disabled={braveKeySaving}
+                                            className="flex items-center gap-3 rounded-full bg-[#111] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80 disabled:opacity-40 dark:bg-white dark:text-[#111]"
+                                        >
+                                            {braveKeySaving ? 'Saving…' : 'Save Key'}
+                                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">
+                                                <ArrowUpRight className="h-3 w-3" />
+                                            </span>
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </TabsContent>

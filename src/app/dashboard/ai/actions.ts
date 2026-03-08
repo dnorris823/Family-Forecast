@@ -45,6 +45,78 @@ export async function saveAIModel(model: string): Promise<{ error?: string }> {
     return {}
 }
 
+// ── AI generation options ─────────────────────────────────────────────────────
+
+export interface AIOptions {
+    temperature: number
+    num_ctx: number | null
+}
+
+export async function getAIOptions(): Promise<AIOptions> {
+    noStore()
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { temperature: 0.7, num_ctx: null }
+
+    const { data } = await supabase
+        .from('profiles')
+        .select('ai_temperature, ai_num_ctx')
+        .eq('id', user.id)
+        .single()
+
+    return {
+        temperature: data?.ai_temperature ?? 0.7,
+        num_ctx: data?.ai_num_ctx ?? null,
+    }
+}
+
+export async function saveAIOptions(temperature: number, num_ctx: number | null): Promise<{ error?: string }> {
+    noStore()
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Not authenticated' }
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ ai_temperature: temperature, ai_num_ctx: num_ctx ?? null })
+        .eq('id', user.id)
+
+    if (error) return { error: error.message }
+    return {}
+}
+
+// ── Brave Search API key ──────────────────────────────────────────────────────
+
+export async function getBraveApiKey(): Promise<string | null> {
+    noStore()
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return null
+
+    const { data } = await supabase
+        .from('profiles')
+        .select('brave_api_key')
+        .eq('id', user.id)
+        .single()
+
+    return data?.brave_api_key ?? null
+}
+
+export async function saveBraveApiKey(key: string): Promise<{ error?: string }> {
+    noStore()
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Not authenticated' }
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ brave_api_key: key || null })
+        .eq('id', user.id)
+
+    if (error) return { error: error.message }
+    return {}
+}
+
 // ── Chat sessions ─────────────────────────────────────────────────────────────
 
 export async function getChatSessions(): Promise<ChatSession[]> {

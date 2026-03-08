@@ -17,6 +17,7 @@ import {
 } from "@/app/dashboard/ai/actions"
 import { useAIModel } from "@/hooks/use-ai-model"
 import { ChatHistoryList } from "@/components/chat/chat-history-list"
+import { markdownComponents } from "@/components/chat/markdown-components"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 
@@ -284,7 +285,7 @@ export function ChatSheet() {
                                                 "prose-hr:border-gray-100 dark:prose-hr:border-white/[0.06]",
                                                 "prose-a:text-[#111] prose-a:underline prose-a:underline-offset-2 dark:prose-a:text-white/80"
                                             )}>
-                                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                                                     {m.content}
                                                 </ReactMarkdown>
                                             </div>

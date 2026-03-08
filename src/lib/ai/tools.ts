@@ -12,10 +12,10 @@ export async function executeAITool(toolName: string, args: any) {
         return { error: 'User not authenticated' }
     }
 
-    // Get user's family_id for data operations
+    // Get user's family_id and API keys for data operations
     const { data: profile } = await supabase
         .from('profiles')
-        .select('family_id')
+        .select('family_id, brave_api_key')
         .eq('id', user.id)
         .single()
 
@@ -66,6 +66,15 @@ export async function executeAITool(toolName: string, args: any) {
 
             case 'delete_folder':
                 return await deleteFolder(supabase, user.id, profile.family_id, args)
+
+            case 'web_search':
+                return await webSearch(profile.brave_api_key, args)
+
+            case 'image_search':
+                return await imageSearch(profile.brave_api_key, args)
+
+            case 'video_search':
+                return await videoSearch(profile.brave_api_key, args)
 
             default:
                 return { error: `Unknown tool: ${toolName}` }
@@ -336,4 +345,102 @@ async function deleteFolder(supabase: any, userId: string, familyId: string, arg
     }
 
     return { success: true, deleted, errors }
+}
+
+async function imageSearch(apiKey: string | null, args: any) {
+    if (!apiKey) {
+        return { error: 'Brave Search API key not configured. Add it in Settings → Integrations → Web Search.' }
+    }
+
+    const count = Math.min(args.count || 6, 10)
+    const url = `https://api.search.brave.com/res/v1/images/search?q=${encodeURIComponent(args.query)}&count=${count}`
+
+    const res = await fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'X-Subscription-Token': apiKey
+        }
+    })
+
+    if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Brave Image Search error ${res.status}: ${text}`)
+    }
+
+    const data = await res.json()
+    const results = (data.results || [])
+        .map((r: any) => ({
+            title: r.title,
+            thumbnail: r.thumbnail?.src,
+            url: r.url,
+            source: r.source
+        }))
+        .filter((r: any) => r.thumbnail)
+
+    return { results, query: args.query }
+}
+
+async function videoSearch(apiKey: string | null, args: any) {
+    if (!apiKey) {
+        return { error: 'Brave Search API key not configured. Add it in Settings → Integrations → Web Search.' }
+    }
+
+    const count = Math.min(args.count || 5, 10)
+    const url = `https://api.search.brave.com/res/v1/videos/search?q=${encodeURIComponent(args.query)}&count=${count}`
+
+    const res = await fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'X-Subscription-Token': apiKey
+        }
+    })
+
+    if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Brave Video Search error ${res.status}: ${text}`)
+    }
+
+    const data = await res.json()
+    const results = (data.results || [])
+        .map((r: any) => ({
+            title: r.title,
+            thumbnail: r.thumbnail?.src,
+            url: r.url,
+            source: r.source,
+            description: r.description,
+            age: r.age
+        }))
+        .filter((r: any) => r.thumbnail)
+
+    return { results, query: args.query }
+}
+
+async function webSearch(apiKey: string | null, args: any) {
+    if (!apiKey) {
+        return { error: 'Brave Search API key not configured. Add it in Settings → Integrations → Web Search.' }
+    }
+
+    const count = Math.min(args.count || 5, 10)
+    const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(args.query)}&count=${count}`
+
+    const res = await fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'X-Subscription-Token': apiKey
+        }
+    })
+
+    if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Brave Search error ${res.status}: ${text}`)
+    }
+
+    const data = await res.json()
+    const results = (data.web?.results || []).map((r: any) => ({
+        title: r.title,
+        url: r.url,
+        description: r.description
+    }))
+
+    return { results, query: args.query }
 }

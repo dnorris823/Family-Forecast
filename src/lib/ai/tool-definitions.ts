@@ -255,5 +255,68 @@ export const AI_TOOLS = [
                 required: ['folder_path']
             }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'web_search',
+            description: 'Search the web for current information, news, facts, or anything not available in the local app data. Use this when the user asks about recent events, current news, or needs information from the internet.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    query: {
+                        type: 'string',
+                        description: 'The search query'
+                    },
+                    count: {
+                        type: 'number',
+                        description: 'Number of results to return (1–10, default 5)'
+                    }
+                },
+                required: ['query']
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'image_search',
+            description: 'Search for images on the web. Use when the user asks to see images or pictures of something. After receiving results, output them ONLY as a fenced code block with language tag "image-results" containing the JSON array.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    query: {
+                        type: 'string',
+                        description: 'Image search query'
+                    },
+                    count: {
+                        type: 'number',
+                        description: 'Number of images to return (1–10, default 6)'
+                    }
+                },
+                required: ['query']
+            }
+        }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'video_search',
+            description: 'Search for videos on the web. Use when the user asks to find or watch videos about something. After receiving results, output them ONLY as a fenced code block with language tag "video-results" containing the JSON array.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    query: {
+                        type: 'string',
+                        description: 'Video search query'
+                    },
+                    count: {
+                        type: 'number',
+                        description: 'Number of videos to return (1–10, default 5)'
+                    }
+                },
+                required: ['query']
+            }
+        }
     }
 ]
