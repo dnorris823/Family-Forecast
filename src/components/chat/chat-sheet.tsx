@@ -171,7 +171,7 @@ export function ChatSheet() {
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
             {/* Trigger */}
             <SheetTrigger asChild>
-                <button className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full bg-[#111] px-5 py-3 text-sm font-medium text-white shadow-xl transition-opacity hover:opacity-80 dark:bg-white dark:text-[#111]">
+                <button className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-blue-500 px-5 py-3 text-sm font-medium text-white shadow-xl animate-glow-pulse transition-opacity hover:opacity-90">
                     <Bot className="h-4 w-4" />
                     {aiName ?? 'Family AI'}
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">
@@ -184,7 +184,7 @@ export function ChatSheet() {
             <SheetContent
                 side="right"
                 style={{ width: sheetWidth, maxWidth: sheetWidth }}
-                className="flex flex-col gap-0 border-l border-gray-100 bg-white p-0 dark:border-white/[0.06] dark:bg-[#111]"
+                className="flex flex-col gap-0 border-l border-gray-100 bg-white p-0 dark:border-white/[0.06] dark:bg-[#0D0D0D]"
             >
                 <VisuallyHidden.Root>
                     <SheetTitle>AI Chat</SheetTitle>
@@ -205,8 +205,8 @@ export function ChatSheet() {
                 {/* Header */}
                 <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-white/[0.06]">
                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#111] dark:bg-white">
-                            <Bot className="h-3.5 w-3.5 text-white dark:text-[#111]" />
+                        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500">
+                            <Bot className="h-3.5 w-3.5 text-white" />
                         </div>
                         <div className="flex flex-col">
                             <span className="text-sm font-medium leading-tight text-[#111] dark:text-white/90">
@@ -243,13 +243,13 @@ export function ChatSheet() {
                     <TabsList className="h-auto shrink-0 rounded-none border-b border-gray-100 bg-transparent p-0 dark:border-white/[0.06]">
                         <TabsTrigger
                             value="chat"
-                            className="flex-1 rounded-none border-b-2 border-transparent py-2.5 text-xs font-medium text-gray-500 data-[state=active]:border-[#111] data-[state=active]:text-[#111] data-[state=active]:shadow-none dark:text-white/40 dark:data-[state=active]:border-white dark:data-[state=active]:text-white"
+                            className="flex-1 rounded-none border-b-2 border-transparent py-2.5 text-xs font-medium text-gray-500 data-[state=active]:border-[#111] data-[state=active]:text-[#111] data-[state=active]:shadow-none dark:text-white/40 dark:data-[state=active]:border-violet-500 dark:data-[state=active]:text-white"
                         >
                             Chat
                         </TabsTrigger>
                         <TabsTrigger
                             value="history"
-                            className="flex-1 rounded-none border-b-2 border-transparent py-2.5 text-xs font-medium text-gray-500 data-[state=active]:border-[#111] data-[state=active]:text-[#111] data-[state=active]:shadow-none dark:text-white/40 dark:data-[state=active]:border-white dark:data-[state=active]:text-white"
+                            className="flex-1 rounded-none border-b-2 border-transparent py-2.5 text-xs font-medium text-gray-500 data-[state=active]:border-[#111] data-[state=active]:text-[#111] data-[state=active]:shadow-none dark:text-white/40 dark:data-[state=active]:border-violet-500 dark:data-[state=active]:text-white"
                         >
                             History
                         </TabsTrigger>
@@ -263,15 +263,15 @@ export function ChatSheet() {
                                     m.role === 'user' ? (
                                         /* User message — pill bubble, right-aligned */
                                         <div key={i} className="flex justify-end">
-                                            <div className="max-w-[80%] min-w-0 break-words overflow-hidden rounded-2xl rounded-br-sm bg-[#111] px-4 py-2.5 text-sm leading-relaxed text-white dark:bg-white dark:text-[#111]">
+                                            <div className="max-w-[80%] min-w-0 break-words overflow-hidden rounded-2xl rounded-br-sm bg-gradient-to-br from-violet-600 to-blue-500 px-4 py-2.5 text-sm leading-relaxed text-white">
                                                 {m.content}
                                             </div>
                                         </div>
                                     ) : (
                                         /* Assistant message — preview-style, full width */
                                         <div key={i} className="flex gap-3">
-                                            <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#111] dark:bg-white">
-                                                <Bot className="h-3 w-3 text-white dark:text-[#111]" />
+                                            <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500">
+                                                <Bot className="h-3 w-3 text-white" />
                                             </div>
                                             <div className={cn(
                                                 "flex-1 min-w-0 text-sm text-[#111] dark:text-white/85",
@@ -300,8 +300,8 @@ export function ChatSheet() {
 
                                 {isLoading && (
                                     <div className="flex gap-3">
-                                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#111] dark:bg-white">
-                                            <Bot className="h-3 w-3 text-white dark:text-[#111]" />
+                                        <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500">
+                                            <Bot className="h-3 w-3 text-white" />
                                         </div>
                                         <div className="flex items-center gap-1.5 pt-1">
                                             {[0, 1, 2].map(i => (
@@ -332,7 +332,7 @@ export function ChatSheet() {
                                 <button
                                     onClick={handleSend}
                                     disabled={isLoading || !input.trim()}
-                                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#111] text-white transition-opacity disabled:opacity-30 hover:opacity-80 dark:bg-white dark:text-[#111]"
+                                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-blue-500 text-white transition-opacity disabled:opacity-30 hover:opacity-90"
                                 >
                                     <Send className="h-3.5 w-3.5" />
                                 </button>

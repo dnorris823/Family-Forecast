@@ -8,12 +8,13 @@ import { ArrowUpRight } from "lucide-react"
 
 export default function LoginPage() {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-white px-6 dark:bg-[#111]">
-            <div className="w-full max-w-sm space-y-8">
+        <div className="flex min-h-screen items-center justify-center bg-white bg-dot-grid px-6 dark:bg-[#0A0A0A]">
+            <div className="pointer-events-none fixed inset-x-0 top-0 h-[50vh] bg-glow-top" aria-hidden />
+            <div className="relative w-full max-w-sm space-y-8">
                 {/* Logo */}
                 <div className="flex items-center gap-2">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#111] dark:bg-white">
-                        <span className="text-sm font-bold text-white dark:text-[#111]">FF</span>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-blue-500">
+                        <span className="text-sm font-bold text-white">FF</span>
                     </div>
                     <span className="text-base font-bold text-[#111] dark:text-white/90">
                         Family<span className="font-display">Forecast</span>
@@ -25,10 +26,10 @@ export default function LoginPage() {
                     <p className="font-mono-ui mb-3 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                         Welcome back
                     </p>
-                    <h1 className="text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95">
+                    <h1 className="gradient-text-accent text-5xl font-bold leading-none tracking-tight">
                         Good to see
                     </h1>
-                    <h1 className="text-5xl leading-tight tracking-tight text-[#111] dark:text-white/95">
+                    <h1 className="gradient-text-accent text-5xl leading-tight tracking-tight">
                         <span className="font-display">you.</span>
                     </h1>
                     <p className="font-mono-ui pt-2 text-xs text-gray-400 dark:text-white/30">
@@ -65,7 +66,7 @@ export default function LoginPage() {
                                     type="email"
                                     placeholder="you@example.com"
                                     required
-                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] placeholder:text-gray-300 focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/20 dark:focus-visible:ring-white/20"
+                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] placeholder:text-gray-300 focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/20 dark:focus-visible:ring-violet-500/40"
                                 />
                             </div>
                             <div className="space-y-1.5">
@@ -77,12 +78,12 @@ export default function LoginPage() {
                                     name="password"
                                     type="password"
                                     required
-                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-white/20"
+                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-violet-500/40"
                                 />
                             </div>
                             <button
                                 type="submit"
-                                className="mt-2 flex w-full items-center justify-between rounded-full bg-[#111] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-[#111]"
+                                className="mt-2 flex w-full items-center justify-between rounded-full btn-gradient px-6 py-3 text-sm font-medium shadow-lg shadow-violet-500/20"
                             >
                                 Sign In
                                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">
@@ -103,7 +104,7 @@ export default function LoginPage() {
                                     name="fullName"
                                     placeholder="Jane Smith"
                                     required
-                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] placeholder:text-gray-300 focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/20 dark:focus-visible:ring-white/20"
+                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] placeholder:text-gray-300 focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/20 dark:focus-visible:ring-violet-500/40"
                                 />
                             </div>
                             <div className="space-y-1.5">
@@ -115,7 +116,7 @@ export default function LoginPage() {
                                     name="email"
                                     type="email"
                                     required
-                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-white/20"
+                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-violet-500/40"
                                 />
                             </div>
                             <div className="space-y-1.5">
@@ -127,12 +128,12 @@ export default function LoginPage() {
                                     name="password"
                                     type="password"
                                     required
-                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-white/20"
+                                    className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-violet-500/40"
                                 />
                             </div>
                             <button
                                 type="submit"
-                                className="mt-2 flex w-full items-center justify-between rounded-full bg-[#111] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-[#111]"
+                                className="mt-2 flex w-full items-center justify-between rounded-full btn-gradient px-6 py-3 text-sm font-medium shadow-lg shadow-violet-500/20"
                             >
                                 Create Account
                                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">

@@ -43,11 +43,11 @@ export async function UserNav() {
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={profile.avatar_url || ""} alt={profile.full_name || ""} />
-                        <AvatarFallback>{initials}</AvatarFallback>
+                        <AvatarFallback className="bg-gradient-to-br from-violet-500 to-blue-500 text-white text-xs font-bold">{initials}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-56 dark:bg-[#111]/95 dark:border-white/[0.08] dark:backdrop-blur-xl" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">{profile.full_name}</p>

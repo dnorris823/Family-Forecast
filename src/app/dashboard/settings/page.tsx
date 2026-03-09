@@ -86,7 +86,7 @@ export default function SettingsPage() {
                 <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                     Preferences
                 </p>
-                <h1 className="animate-fade-up [animation-delay:0.1s] text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                <h1 className="animate-fade-up [animation-delay:0.1s] dark-gradient-heading text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
                     Settings<span className="font-display">.</span>
                 </h1>
             </div>
@@ -96,25 +96,25 @@ export default function SettingsPage() {
                     <TabsList className="h-auto rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.06]">
                         <TabsTrigger
                             value="general"
-                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-gradient-to-r dark:data-[state=active]:from-violet-600 dark:data-[state=active]:to-blue-500 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                         >
                             General
                         </TabsTrigger>
                         <TabsTrigger
                             value="family"
-                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-gradient-to-r dark:data-[state=active]:from-violet-600 dark:data-[state=active]:to-blue-500 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                         >
                             Family Group
                         </TabsTrigger>
                         <TabsTrigger
                             value="ai"
-                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-gradient-to-r dark:data-[state=active]:from-violet-600 dark:data-[state=active]:to-blue-500 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                         >
                             AI Rules
                         </TabsTrigger>
                         <TabsTrigger
                             value="integrations"
-                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                            className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-gradient-to-r dark:data-[state=active]:from-violet-600 dark:data-[state=active]:to-blue-500 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                         >
                             Integrations
                         </TabsTrigger>
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                                     </Label>
                                     <Input
                                         defaultValue="Dad"
-                                        className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-white/20"
+                                        className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-violet-500/40"
                                     />
                                 </div>
                                 <div className="space-y-1.5">
@@ -151,7 +151,7 @@ export default function SettingsPage() {
                                         className="rounded-xl border-gray-200 bg-[#f8f8f8] text-gray-400 dark:border-white/[0.06] dark:bg-white/[0.02] dark:text-white/30"
                                     />
                                 </div>
-                                <button className="flex items-center gap-3 rounded-full bg-[#111] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80 dark:bg-white dark:text-[#111]">
+                                <button className="flex items-center gap-3 rounded-full btn-gradient px-5 py-2.5 text-sm font-medium shadow-lg shadow-violet-500/20">
                                     Save Changes
                                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">
                                         <ArrowUpRight className="h-3 w-3" />
@@ -207,7 +207,7 @@ export default function SettingsPage() {
                                         <select
                                             value={selectedModel}
                                             onChange={e => setSelectedModel(e.target.value)}
-                                            className="w-full rounded-xl border border-gray-200 bg-[#f8f8f8] px-3 py-2 text-sm text-[#111] focus:outline-none focus:ring-1 focus:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus:ring-white/20"
+                                            className="w-full rounded-xl border border-gray-200 bg-[#f8f8f8] px-3 py-2 text-sm text-[#111] focus:outline-none focus:ring-1 focus:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus:ring-violet-500/40"
                                         >
                                             {models.map(model => (
                                                 <option key={model} value={model}>{model}</option>
@@ -249,7 +249,7 @@ export default function SettingsPage() {
                                         step={0.05}
                                         value={aiTemp}
                                         onChange={e => setAiTemp(parseFloat(e.target.value))}
-                                        className="w-full accent-[#111] dark:accent-white"
+                                        className="w-full accent-violet-500 dark:accent-violet-400"
                                     />
                                     <div className="flex justify-between text-[10px] text-gray-300 dark:text-white/20">
                                         <span>Precise</span>
@@ -265,7 +265,7 @@ export default function SettingsPage() {
                                     <select
                                         value={aiNumCtx ?? ''}
                                         onChange={e => setAiNumCtx(e.target.value ? parseInt(e.target.value) : null)}
-                                        className="w-full rounded-xl border border-gray-200 bg-[#f8f8f8] px-3 py-2 text-sm text-[#111] focus:outline-none focus:ring-1 focus:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus:ring-white/20"
+                                        className="w-full rounded-xl border border-gray-200 bg-[#f8f8f8] px-3 py-2 text-sm text-[#111] focus:outline-none focus:ring-1 focus:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus:ring-violet-500/40"
                                     >
                                         <option value="">Model default</option>
                                         <option value="2048">2,048 tokens</option>
@@ -285,7 +285,7 @@ export default function SettingsPage() {
                                 <button
                                     onClick={handleSaveAIOptions}
                                     disabled={aiOptionsSaving}
-                                    className="flex items-center gap-3 rounded-full bg-[#111] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80 disabled:opacity-40 dark:bg-white dark:text-[#111]"
+                                    className="flex items-center gap-3 rounded-full btn-gradient px-5 py-2.5 text-sm font-medium shadow-lg shadow-violet-500/20 disabled:opacity-40"
                                 >
                                     {aiOptionsSaving ? 'Saving…' : 'Save Parameters'}
                                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">
@@ -389,7 +389,7 @@ export default function SettingsPage() {
                                                 value={braveKey}
                                                 onChange={e => setBraveKey(e.target.value)}
                                                 placeholder="BSA..."
-                                                className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-white/20"
+                                                className="rounded-xl border-gray-200 bg-[#f8f8f8] text-[#111] focus-visible:ring-1 focus-visible:ring-[#111] dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white dark:focus-visible:ring-violet-500/40"
                                             />
                                             <p className="text-xs text-gray-400 dark:text-white/30">
                                                 Get a free key at brave.com/search/api — leave blank to disable web search.
@@ -401,7 +401,7 @@ export default function SettingsPage() {
                                         <button
                                             onClick={handleSaveBraveKey}
                                             disabled={braveKeySaving}
-                                            className="flex items-center gap-3 rounded-full bg-[#111] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-80 disabled:opacity-40 dark:bg-white dark:text-[#111]"
+                                            className="flex items-center gap-3 rounded-full btn-gradient px-5 py-2.5 text-sm font-medium shadow-lg shadow-violet-500/20 disabled:opacity-40"
                                         >
                                             {braveKeySaving ? 'Saving…' : 'Save Key'}
                                             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 dark:bg-black/10">

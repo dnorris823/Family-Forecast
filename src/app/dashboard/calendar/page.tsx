@@ -43,7 +43,7 @@ export default function CalendarPage() {
                     <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                         Schedule
                     </p>
-                    <h1 className="animate-fade-up [animation-delay:0.1s] text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                    <h1 className="animate-fade-up [animation-delay:0.1s] dark-gradient-heading text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
                         Calendar<span className="font-display">.</span>
                     </h1>
                 </div>
@@ -100,7 +100,7 @@ export default function CalendarPage() {
                                 className={cn(
                                     "ml-auto flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium",
                                     isSameDay(day, new Date())
-                                        ? "bg-[#111] font-bold text-white dark:bg-white dark:text-[#111]"
+                                        ? "bg-gradient-to-br from-violet-500 to-blue-500 font-bold text-white"
                                         : "text-gray-700 dark:text-white/70"
                                 )}
                             >
@@ -115,7 +115,7 @@ export default function CalendarPage() {
                                             className={cn(
                                                 "truncate rounded-full px-2 py-0.5 text-[10px] font-medium",
                                                 !event.is_private
-                                                    ? "bg-[#111] text-white dark:bg-white dark:text-[#111]"
+                                                    ? "bg-gradient-to-r from-violet-600 to-blue-500 text-white"
                                                     : "bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-white/50"
                                             )}
                                         >

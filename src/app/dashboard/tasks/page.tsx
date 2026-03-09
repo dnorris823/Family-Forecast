@@ -10,8 +10,8 @@ import { useRealtimeSubscription } from "@/hooks/use-realtime-subscription"
 import { format } from "date-fns"
 
 const priorityStyles: Record<string, string> = {
-    urgent: "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400",
-    high: "bg-orange-50 text-orange-600 dark:bg-orange-950/40 dark:text-orange-400",
+    urgent: "bg-red-50 text-red-600 dark:bg-violet-500/20 dark:text-violet-300",
+    high: "bg-orange-50 text-orange-600 dark:bg-violet-500/10 dark:text-violet-400",
     medium: "bg-gray-100 text-gray-500 dark:bg-white/[0.06] dark:text-white/40",
     low: "bg-gray-50 text-gray-400 dark:bg-white/[0.03] dark:text-white/25",
 }
@@ -49,7 +49,7 @@ export default function TasksPage() {
                     <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                         Manage
                     </p>
-                    <h1 className="animate-fade-up [animation-delay:0.1s] text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                    <h1 className="animate-fade-up [animation-delay:0.1s] dark-gradient-heading text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
                         Tasks<span className="font-display">.</span>
                     </h1>
                 </div>
@@ -63,13 +63,13 @@ export default function TasksPage() {
                 <TabsList className="h-auto rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.06]">
                     <TabsTrigger
                         value="list"
-                        className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                        className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-gradient-to-r dark:data-[state=active]:from-violet-600 dark:data-[state=active]:to-blue-500 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                     >
                         List
                     </TabsTrigger>
                     <TabsTrigger
                         value="board"
-                        className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
+                        className="rounded-full px-5 py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-gradient-to-r dark:data-[state=active]:from-violet-600 dark:data-[state=active]:to-blue-500 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40"
                     >
                         Board
                     </TabsTrigger>
@@ -100,12 +100,12 @@ export default function TasksPage() {
                                             className={cn(
                                                 "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
                                                 task.status === 'done'
-                                                    ? "border-[#111] bg-[#111] dark:border-white dark:bg-white"
+                                                    ? "border-violet-500 bg-gradient-to-br from-violet-500 to-blue-500"
                                                     : "border-gray-300 hover:border-gray-500 dark:border-white/20 dark:hover:border-white/40"
                                             )}
                                         >
                                             {task.status === 'done' && (
-                                                <svg className="h-2.5 w-2.5 text-white dark:text-[#111]" fill="none" viewBox="0 0 12 12">
+                                                <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 12 12">
                                                     <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                                 </svg>
                                             )}
@@ -162,7 +162,7 @@ export default function TasksPage() {
                                                 const next = status === 'todo' ? 'in_progress' : status === 'in_progress' ? 'done' : 'todo'
                                                 handleStatusChange(task.id, next)
                                             }}
-                                            className="cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 transition-all hover:border-gray-200 hover:shadow-sm dark:border-white/[0.06] dark:bg-[#1a1a1a] dark:hover:border-white/10"
+                                            className="cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 transition-all hover:border-gray-200 hover:shadow-sm dark:border-white/[0.06] dark:bg-[#1a1a1a] dark:hover:border-violet-500/25"
                                         >
                                             <p className="text-sm font-medium text-[#111] dark:text-white/90">
                                                 {task.title}

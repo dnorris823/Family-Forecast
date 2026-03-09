@@ -29,11 +29,11 @@ export function AtAGlance({ data }: AtAGlanceProps) {
     return (
         <div className="space-y-4">
             {/* ── Stats bar ────────────────────────────────────────────── */}
-            <div className="grid grid-cols-3 divide-x divide-gray-200 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:divide-white/[0.06] dark:bg-white/[0.03]">
+            <div className="framer-card grid grid-cols-3 divide-x divide-gray-200 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:divide-white/[0.06] dark:bg-white/[0.03]">
                 <div className="animate-fade-up [animation-delay:0.3s] px-8 py-7 text-center">
                     <div className="flex items-start justify-center">
                         <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
-                        <span className="text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
+                        <span className="gradient-stat text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
                             {data.events.length}
                         </span>
                     </div>
@@ -44,7 +44,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                 <div className="animate-fade-up [animation-delay:0.35s] px-8 py-7 text-center">
                     <div className="flex items-start justify-center">
                         <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
-                        <span className="text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
+                        <span className="gradient-stat text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
                             {data.totalTasks}
                         </span>
                     </div>
@@ -55,7 +55,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                 <div className="animate-fade-up [animation-delay:0.4s] px-8 py-7 text-center">
                     <div className="flex items-start justify-center">
                         <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
-                        <span className="text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
+                        <span className="gradient-stat text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
                             {data.notes.length}
                         </span>
                     </div>
@@ -69,7 +69,8 @@ export function AtAGlance({ data }: AtAGlanceProps) {
             <div className="grid grid-cols-3 grid-rows-2 gap-4">
 
                 {/* Events — dark card, spans 2 cols × 2 rows */}
-                <div className="awakee-card animate-fade-up [animation-delay:0.45s] col-span-2 row-span-2 flex flex-col rounded-3xl bg-[#111] p-8 text-white">
+                <div className="awakee-card framer-card animate-fade-up [animation-delay:0.45s] col-span-2 row-span-2 relative overflow-hidden flex flex-col rounded-3xl bg-[#111] p-8 text-white">
+                    <div className="pointer-events-none absolute inset-0 rounded-3xl" style={{background:'radial-gradient(ellipse 60% 30% at 50% 0%, rgba(139,92,246,0.07) 0%, transparent 70%)'}} aria-hidden />
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <CalendarDays className="h-4 w-4 text-white/50" />
@@ -121,8 +122,8 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                     )}
                 </div>
 
-                {/* Tasks — coral card */}
-                <div className="awakee-card animate-fade-up [animation-delay:0.5s] flex flex-col rounded-3xl bg-[#C85A3A] p-6">
+                {/* Tasks — gradient card */}
+                <div className="awakee-card animate-fade-up [animation-delay:0.5s] flex flex-col rounded-3xl bg-gradient-to-br from-violet-600 to-blue-500 p-6">
                     <div className="flex items-center justify-between">
                         <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/60">
                             Active Tasks
@@ -161,7 +162,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                 </div>
 
                 {/* Notes — light gray card */}
-                <div className="awakee-card animate-fade-up [animation-delay:0.55s] flex flex-col rounded-3xl bg-[#f5f5f5] p-6 dark:bg-white/[0.07]">
+                <div className="awakee-card framer-card animate-fade-up [animation-delay:0.55s] flex flex-col rounded-3xl bg-[#f5f5f5] p-6 dark:bg-white/[0.04]">
                     <div className="flex items-center justify-between">
                         <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">
                             Second Brain

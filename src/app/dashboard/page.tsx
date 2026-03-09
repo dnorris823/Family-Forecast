@@ -26,10 +26,10 @@ export default async function DashboardPage() {
                         day: "numeric",
                     })}
                 </p>
-                <h1 className="animate-fade-up [animation-delay:0.1s] text-6xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-7xl">
+                <h1 className="animate-fade-up [animation-delay:0.1s] dark-gradient-heading text-6xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-7xl">
                     Your Family
                 </h1>
-                <h1 className="animate-fade-up [animation-delay:0.18s] text-6xl leading-tight tracking-tight text-[#111] dark:text-white/95 lg:text-7xl">
+                <h1 className="animate-fade-up [animation-delay:0.18s] dark-gradient-heading text-6xl leading-tight tracking-tight text-[#111] dark:text-white/95 lg:text-7xl">
                     <span className="font-display">Dashboard.</span>
                 </h1>
             </div>

@@ -42,7 +42,7 @@ export function ChatHistoryList({
                 <Button
                     variant="outline"
                     size="sm"
-                    className="w-full gap-2 rounded-full text-xs border-gray-200 bg-transparent text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-white/[0.10] dark:text-white/60 dark:hover:bg-white/[0.06] dark:hover:text-white/90"
+                    className="w-full gap-2 rounded-full text-xs border-violet-500/30 bg-transparent text-violet-600 hover:bg-violet-500/[0.08] hover:text-violet-700 dark:border-violet-500/30 dark:text-violet-400 dark:hover:bg-violet-500/[0.08] dark:hover:text-violet-300"
                     onClick={onNew}
                 >
                     <SquarePen className="h-3.5 w-3.5" />
@@ -96,7 +96,7 @@ function SessionRow({ session, isActive, onLoad, onDelete }: SessionRowProps) {
         <div
             className={cn(
                 "group flex items-start gap-2 px-3 py-3 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.03]",
-                isActive && "bg-gray-50 dark:bg-white/[0.04]"
+                isActive && "bg-gray-50 dark:bg-violet-500/[0.08]"
             )}
             onClick={() => onLoad(session)}
         >
