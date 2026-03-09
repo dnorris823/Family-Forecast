@@ -257,7 +257,7 @@ export default function SecondBrainPage() {
             <div className="relative flex h-[calc(100dvh-7.5rem)] flex-col overflow-hidden">
                 {SeedingSkeleton}
                 {OnboardingBanner}
-                <Tabs defaultValue="notes" className="flex flex-1 flex-col min-h-0">
+                <Tabs defaultValue="notes" className="animate-fade-in [animation-delay:0.1s] flex flex-1 flex-col min-h-0">
                     <TabsList className="h-auto w-full shrink-0 rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.06]">
                         <TabsTrigger value="notes" className="flex-1 rounded-full py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40">Notes</TabsTrigger>
                         <TabsTrigger value="editor" className="flex-1 rounded-full py-1.5 text-sm data-[state=active]:bg-white data-[state=active]:font-medium data-[state=active]:shadow-sm data-[state=active]:text-[#111] data-[state=inactive]:text-gray-500 dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white dark:data-[state=inactive]:text-white/40">Editor</TabsTrigger>
@@ -297,7 +297,7 @@ export default function SecondBrainPage() {
             {SeedingSkeleton}
             {OnboardingBanner}
             <PanelGroup
-                className="flex-1 min-h-0"
+                className="animate-fade-in [animation-delay:0.1s] flex-1 min-h-0"
                 orientation="horizontal"
                 id="brain-panels"
                 defaultLayout={savedLayout}

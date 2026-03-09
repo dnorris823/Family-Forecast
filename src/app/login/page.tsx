@@ -22,11 +22,14 @@ export default function LoginPage() {
 
                 {/* Display heading */}
                 <div className="space-y-1">
+                    <p className="font-mono-ui mb-3 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
+                        Welcome back
+                    </p>
                     <h1 className="text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95">
-                        Welcome
+                        Good to see
                     </h1>
                     <h1 className="text-5xl leading-tight tracking-tight text-[#111] dark:text-white/95">
-                        <span className="font-display">back.</span>
+                        <span className="font-display">you.</span>
                     </h1>
                     <p className="font-mono-ui pt-2 text-xs text-gray-400 dark:text-white/30">
                         Sign in to your family space

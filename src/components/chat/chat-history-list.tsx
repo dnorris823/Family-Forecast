@@ -42,7 +42,7 @@ export function ChatHistoryList({
                 <Button
                     variant="outline"
                     size="sm"
-                    className="w-full gap-2 rounded-full text-xs"
+                    className="w-full gap-2 rounded-full text-xs border-gray-200 bg-transparent text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-white/[0.10] dark:text-white/60 dark:hover:bg-white/[0.06] dark:hover:text-white/90"
                     onClick={onNew}
                 >
                     <SquarePen className="h-3.5 w-3.5" />

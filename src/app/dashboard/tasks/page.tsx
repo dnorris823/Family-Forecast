@@ -46,18 +46,20 @@ export default function TasksPage() {
             {/* Header */}
             <div className="flex items-end justify-between pt-4">
                 <div>
-                    <p className="font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
+                    <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                         Manage
                     </p>
-                    <h1 className="text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                    <h1 className="animate-fade-up [animation-delay:0.1s] text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
                         Tasks<span className="font-display">.</span>
                     </h1>
                 </div>
-                <CreateTaskDialog onSuccess={fetchTasks} />
+                <div className="animate-fade-up [animation-delay:0.18s]">
+                    <CreateTaskDialog onSuccess={fetchTasks} />
+                </div>
             </div>
 
             {/* Tabs */}
-            <Tabs defaultValue="list" className="space-y-6">
+            <Tabs defaultValue="list" className="animate-fade-up [animation-delay:0.28s] space-y-6">
                 <TabsList className="h-auto rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.06]">
                     <TabsTrigger
                         value="list"

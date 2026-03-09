@@ -40,15 +40,15 @@ export default function CalendarPage() {
             {/* Header */}
             <div className="flex items-end justify-between pt-4">
                 <div>
-                    <p className="font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
+                    <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                         Schedule
                     </p>
-                    <h1 className="text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                    <h1 className="animate-fade-up [animation-delay:0.1s] text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
                         Calendar<span className="font-display">.</span>
                     </h1>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="animate-fade-up [animation-delay:0.18s] flex items-center gap-2">
                     <button
                         onClick={handlePrevMonth}
                         className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10"
@@ -69,7 +69,7 @@ export default function CalendarPage() {
             </div>
 
             {/* Calendar grid */}
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-white/[0.06]">
+            <div className="animate-fade-up [animation-delay:0.28s] flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-white/[0.06]">
                 {/* Day headers */}
                 <div className="grid grid-cols-7 border-b border-gray-200 bg-[#f8f8f8] dark:border-white/[0.06] dark:bg-white/[0.02]">
                     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -91,7 +91,7 @@ export default function CalendarPage() {
                             className={cn(
                                 "flex cursor-pointer flex-col border-b border-r border-gray-100 p-2 transition-colors dark:border-white/[0.04]",
                                 "hover:bg-[#f8f8f8] dark:hover:bg-white/[0.02]",
-                                !isSameMonth(day, firstDayOfMonth) && "opacity-35",
+                                !isSameMonth(day, firstDayOfMonth) && "opacity-25",
                                 isSameDay(day, selectedDate ?? new Date(-1)) && "bg-[#f5f5f5] dark:bg-white/[0.03]"
                             )}
                         >

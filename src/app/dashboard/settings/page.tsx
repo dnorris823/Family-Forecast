@@ -83,15 +83,15 @@ export default function SettingsPage() {
         <div className="flex-1 space-y-8">
             {/* Header */}
             <div className="pt-4">
-                <p className="font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
+                <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
                     Preferences
                 </p>
-                <h1 className="text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                <h1 className="animate-fade-up [animation-delay:0.1s] text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
                     Settings<span className="font-display">.</span>
                 </h1>
             </div>
 
-            <div className="max-w-2xl">
+            <div className="animate-fade-up [animation-delay:0.22s] max-w-2xl">
                 <Tabs defaultValue="general" className="space-y-6">
                     <TabsList className="h-auto rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.06]">
                         <TabsTrigger

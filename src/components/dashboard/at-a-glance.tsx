@@ -19,10 +19,10 @@ interface AtAGlanceProps {
 }
 
 const priorityColors: Record<string, string> = {
-    urgent: "bg-red-100 text-red-700",
-    high: "bg-orange-100 text-orange-700",
-    medium: "bg-gray-100 text-gray-600",
-    low: "bg-gray-50 text-gray-400",
+    urgent: "bg-white/20 text-white",
+    high: "bg-white/15 text-white/80",
+    medium: "bg-white/10 text-white/60",
+    low: "bg-white/[0.06] text-white/40",
 }
 
 export function AtAGlance({ data }: AtAGlanceProps) {
@@ -30,7 +30,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
         <div className="space-y-4">
             {/* ── Stats bar ────────────────────────────────────────────── */}
             <div className="grid grid-cols-3 divide-x divide-gray-200 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:divide-white/[0.06] dark:bg-white/[0.03]">
-                <div className="px-8 py-7 text-center">
+                <div className="animate-fade-up [animation-delay:0.3s] px-8 py-7 text-center">
                     <div className="flex items-start justify-center">
                         <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
                         <span className="text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
@@ -41,7 +41,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                         Upcoming Events
                     </p>
                 </div>
-                <div className="px-8 py-7 text-center">
+                <div className="animate-fade-up [animation-delay:0.35s] px-8 py-7 text-center">
                     <div className="flex items-start justify-center">
                         <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
                         <span className="text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
@@ -52,7 +52,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                         Active Tasks
                     </p>
                 </div>
-                <div className="px-8 py-7 text-center">
+                <div className="animate-fade-up [animation-delay:0.4s] px-8 py-7 text-center">
                     <div className="flex items-start justify-center">
                         <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
                         <span className="text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
@@ -69,7 +69,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
             <div className="grid grid-cols-3 grid-rows-2 gap-4">
 
                 {/* Events — dark card, spans 2 cols × 2 rows */}
-                <div className="awakee-card col-span-2 row-span-2 flex flex-col rounded-3xl bg-[#111] p-8 text-white">
+                <div className="awakee-card animate-fade-up [animation-delay:0.45s] col-span-2 row-span-2 flex flex-col rounded-3xl bg-[#111] p-8 text-white">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <CalendarDays className="h-4 w-4 text-white/50" />
@@ -88,7 +88,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                     <div className="mt-6 flex-1 space-y-0">
                         {data.events.length === 0 ? (
                             <p className="font-mono-ui py-4 text-sm italic text-white/30">
-                                No upcoming events
+                                Nothing scheduled — enjoy the quiet.
                             </p>
                         ) : (
                             data.events.map((event, i) => (
@@ -121,28 +121,28 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                     )}
                 </div>
 
-                {/* Tasks — yellow card */}
-                <div className="awakee-card flex flex-col rounded-3xl bg-[#f5e641] p-6">
+                {/* Tasks — coral card */}
+                <div className="awakee-card animate-fade-up [animation-delay:0.5s] flex flex-col rounded-3xl bg-[#C85A3A] p-6">
                     <div className="flex items-center justify-between">
-                        <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-black/40">
+                        <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/60">
                             Active Tasks
                         </span>
                         <Link href="/dashboard/tasks">
-                            <CheckCircle2 className="h-4 w-4 text-black/30 transition-colors hover:text-black/70" />
+                            <CheckCircle2 className="h-4 w-4 text-white/30 transition-colors hover:text-white/70" />
                         </Link>
                     </div>
                     <div className="mt-4 flex-1 space-y-2">
                         {data.tasks.length === 0 ? (
-                            <p className="text-sm italic text-black/40">All clear!</p>
+                            <p className="text-sm italic text-white/60">All clear — nothing on your plate.</p>
                         ) : (
                             data.tasks.slice(0, 3).map((task) => (
                                 <div key={task.id} className="flex items-center justify-between gap-2">
-                                    <span className="line-clamp-1 text-sm font-medium text-[#111]">
+                                    <span className="line-clamp-1 text-sm font-medium text-white/90">
                                         {task.title}
                                     </span>
                                     <span className={cn(
                                         "font-mono-ui shrink-0 rounded-full px-2 py-0.5 text-[9px] uppercase tracking-wider",
-                                        priorityColors[task.priority] ?? "bg-gray-100 text-gray-500"
+                                        priorityColors[task.priority] ?? "bg-white/10 text-white/60"
                                     )}>
                                         {task.priority}
                                     </span>
@@ -153,7 +153,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                     {data.totalTasks > 3 && (
                         <Link
                             href="/dashboard/tasks"
-                            className="font-mono-ui mt-4 text-[10px] uppercase tracking-widest text-black/40 hover:text-black/70"
+                            className="font-mono-ui mt-4 text-[10px] uppercase tracking-widest text-white/60 hover:text-white/90"
                         >
                             +{data.totalTasks - 3} more →
                         </Link>
@@ -161,7 +161,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                 </div>
 
                 {/* Notes — light gray card */}
-                <div className="awakee-card flex flex-col rounded-3xl bg-[#f5f5f5] p-6 dark:bg-white/[0.07]">
+                <div className="awakee-card animate-fade-up [animation-delay:0.55s] flex flex-col rounded-3xl bg-[#f5f5f5] p-6 dark:bg-white/[0.07]">
                     <div className="flex items-center justify-between">
                         <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">
                             Second Brain
@@ -172,7 +172,7 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                     </div>
                     <div className="mt-4 flex-1 space-y-2">
                         {data.notes.length === 0 ? (
-                            <p className="text-sm italic text-black/40 dark:text-white/30">No recent notes</p>
+                            <p className="text-sm italic text-black/40 dark:text-white/30">Start your first note.</p>
                         ) : (
                             data.notes.slice(0, 4).map((note) => (
                                 <Link

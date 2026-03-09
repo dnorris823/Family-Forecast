@@ -153,8 +153,8 @@ function DraggableNote({
                     {...attributes}
                     {...listeners}
                     className={cn(
-                        "flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-accent/50 text-sm rounded group",
-                        isSelected && "bg-accent",
+                        "flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/[0.05] text-sm rounded group",
+                        isSelected && "bg-gray-100 dark:bg-white/[0.08]",
                         isDragging && "opacity-50"
                     )}
                     onClick={() => { if (!isRenaming) onSelectNote(node.path) }}
@@ -167,10 +167,10 @@ function DraggableNote({
                 >
                     <div style={{ width: `${depth * 12}px` }} />
                     <div className="w-3" />
-                    <FileText className="h-3 w-3 shrink-0 text-muted-foreground" />
+                    <FileText className="h-3 w-3 shrink-0 text-gray-400 dark:text-white/40" />
                     {isRenaming ? (
                         <input
-                            className="flex-1 text-xs bg-background border rounded px-1 h-5 outline-none"
+                            className="flex-1 text-xs bg-white dark:bg-[#111] border border-gray-200 dark:border-white/[0.08] rounded-md px-1 h-5 outline-none text-[#111] dark:text-white/90"
                             value={renameValue}
                             autoFocus
                             onChange={(e) => setRenameValue(e.target.value)}
@@ -182,14 +182,14 @@ function DraggableNote({
                         <span className="truncate flex-1">{node.name}</span>
                     )}
                     {isAIMemory && !isRenaming && (
-                        <Bot className="h-3 w-3 shrink-0 text-muted-foreground/60" />
+                        <Bot className="h-3 w-3 shrink-0 text-gray-400/60 dark:text-white/30" />
                     )}
                     {node.note?.is_shared && !isRenaming && !isAIMemory && (
-                        <Share2 className="h-3 w-3 shrink-0 text-muted-foreground" />
+                        <Share2 className="h-3 w-3 shrink-0 text-gray-400 dark:text-white/40" />
                     )}
                     <DropdownMenuTrigger asChild>
                         <button
-                            className="opacity-0 group-hover:opacity-100 h-4 w-4 flex items-center justify-center shrink-0 rounded hover:bg-accent"
+                            className="opacity-0 group-hover:opacity-100 h-4 w-4 flex items-center justify-center shrink-0 rounded hover:bg-gray-100 dark:hover:bg-white/[0.06]"
                             onClick={(e) => e.stopPropagation()}
                             title="More options"
                         >
@@ -293,8 +293,8 @@ function DroppableFolder({
                 <div
                     ref={setNodeRef}
                     className={cn(
-                        "flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-accent/50 text-sm rounded group",
-                        isOver && !isAIMemory && "bg-accent/70 ring-1 ring-primary/50"
+                        "flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-gray-100 dark:hover:bg-white/[0.05] text-sm rounded group",
+                        isOver && !isAIMemory && "bg-gray-100 dark:bg-white/[0.06] ring-1 ring-[#111]/20 dark:ring-white/20"
                     )}
                     onClick={() => { if (!isRenaming) onToggle() }}
                     onDoubleClick={(e) => {
@@ -311,13 +311,13 @@ function DroppableFolder({
                         <ChevronRight className="h-3 w-3 shrink-0" />
                     )}
                     {isExpanded ? (
-                        <FolderOpen className="h-3 w-3 shrink-0 text-muted-foreground" />
+                        <FolderOpen className="h-3 w-3 shrink-0 text-gray-400 dark:text-white/40" />
                     ) : (
-                        <Folder className="h-3 w-3 shrink-0 text-muted-foreground" />
+                        <Folder className="h-3 w-3 shrink-0 text-gray-400 dark:text-white/40" />
                     )}
                     {isRenaming ? (
                         <input
-                            className="flex-1 text-xs bg-background border rounded px-1 h-5 outline-none"
+                            className="flex-1 text-xs bg-white dark:bg-[#111] border border-gray-200 dark:border-white/[0.08] rounded-md px-1 h-5 outline-none text-[#111] dark:text-white/90"
                             value={renameValue}
                             autoFocus
                             onChange={(e) => setRenameValue(e.target.value)}
@@ -341,7 +341,7 @@ function DroppableFolder({
                     )}
                     <DropdownMenuTrigger asChild>
                         <button
-                            className="opacity-0 group-hover:opacity-100 h-4 w-4 flex items-center justify-center shrink-0 rounded hover:bg-accent"
+                            className="opacity-0 group-hover:opacity-100 h-4 w-4 flex items-center justify-center shrink-0 rounded hover:bg-gray-100 dark:hover:bg-white/[0.06]"
                             onClick={(e) => e.stopPropagation()}
                             title="More options"
                         >
@@ -386,7 +386,7 @@ function DroppableFolder({
                                         <li key={idx} className="ml-2">• {name}</li>
                                     ))}
                                     {folderNoteNames.length > 10 && (
-                                        <li className="ml-2 text-muted-foreground">... and {folderNoteNames.length - 10} more</li>
+                                        <li className="ml-2 text-gray-500 dark:text-white/40">... and {folderNoteNames.length - 10} more</li>
                                     )}
                                 </ul>
                             )}
@@ -715,9 +715,9 @@ export function FileTree({
     }
 
     return (
-        <div className="flex flex-col h-full border-r">
+        <div className="flex flex-col h-full border-r bg-white dark:bg-[#111]">
             {/* Search bar */}
-            <div className="p-2 border-b">
+            <div className="p-2 border-b border-gray-100 dark:border-white/[0.05]">
                 <Input
                     placeholder="Search..."
                     value={searchQuery}
@@ -731,7 +731,7 @@ export function FileTree({
                     <div className="p-1">
                         {/* ── My Notes section ─────────────────────────── */}
                         <div className="flex items-center justify-between px-2 py-1.5">
-                            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                            <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-white/40">
                                 My Notes
                             </span>
                             <div className="flex items-center gap-0.5">
@@ -787,13 +787,13 @@ export function FileTree({
                         />
 
                         {/* ── Divider ──────────────────────────────────── */}
-                        <div className="mx-2 my-2 border-t border-dashed border-muted-foreground/20" />
+                        <div className="mx-2 my-2 border-t border-dashed border-gray-200 dark:border-white/[0.08]" />
 
                         {/* ── AI Memory section ─────────────────────────── */}
                         <div className="flex items-center justify-between px-2 py-1.5">
                             <div className="flex items-center gap-1.5">
-                                <Bot className="h-3 w-3 text-muted-foreground/60" />
-                                <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                                <Bot className="h-3 w-3 text-gray-400/60 dark:text-white/30" />
+                                <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-white/40">
                                     AI Memory
                                 </span>
                             </div>

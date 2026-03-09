@@ -184,17 +184,17 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
     }
 
     return (
-        <div className="flex flex-col h-full border-l">
+        <div className="flex flex-col h-full border-l bg-white dark:bg-[#111]">
             {/* Header */}
-            <div className="p-3 border-b space-y-2">
+            <div className="p-3 border-b border-gray-100 dark:border-white/[0.05] space-y-2">
                 <div className="flex items-center gap-2">
-                    <Bot className="h-4 w-4 text-primary shrink-0" />
+                    <Bot className="h-4 w-4 text-[#111] dark:text-white/80 shrink-0" />
                     <div className="flex flex-col min-w-0 flex-1">
                         <h3 className="font-semibold text-sm leading-tight truncate">
                             {aiName ?? 'Assistant'}
                         </h3>
                         {selectedModel && (
-                            <span className="text-[10px] text-muted-foreground truncate">
+                            <span className="text-[10px] text-gray-500 dark:text-white/40 truncate">
                                 {selectedModel}
                             </span>
                         )}
@@ -231,13 +231,13 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                 <TabsList className="h-auto shrink-0 w-full rounded-none border-b bg-transparent p-0">
                     <TabsTrigger
                         value="chat"
-                        className="flex-1 rounded-none border-b-2 border-transparent py-1.5 text-xs data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=inactive]:text-muted-foreground"
+                        className="flex-1 rounded-none border-b-2 border-transparent py-1.5 text-xs data-[state=active]:border-[#111] dark:data-[state=active]:border-white data-[state=active]:shadow-none data-[state=inactive]:text-gray-500 dark:data-[state=inactive]:text-white/40"
                     >
                         Chat
                     </TabsTrigger>
                     <TabsTrigger
                         value="history"
-                        className="flex-1 rounded-none border-b-2 border-transparent py-1.5 text-xs data-[state=active]:border-primary data-[state=active]:shadow-none data-[state=inactive]:text-muted-foreground"
+                        className="flex-1 rounded-none border-b-2 border-transparent py-1.5 text-xs data-[state=active]:border-[#111] dark:data-[state=active]:border-white data-[state=active]:shadow-none data-[state=inactive]:text-gray-500 dark:data-[state=inactive]:text-white/40"
                     >
                         History
                     </TabsTrigger>
@@ -257,15 +257,15 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                                 >
                                     <div className={cn(
                                         "h-6 w-6 rounded-full flex items-center justify-center shrink-0",
-                                        m.role === 'user' ? "bg-primary text-primary-foreground" : "bg-muted"
+                                        m.role === 'user' ? "bg-[#111] text-white dark:bg-white dark:text-[#111]" : "bg-gray-100 dark:bg-white/[0.06]"
                                     )}>
                                         {m.role === 'user' ? <User className="h-3 w-3" /> : <Bot className="h-3 w-3" />}
                                     </div>
                                     <div className={cn(
                                         "p-2 rounded-lg text-xs",
                                         m.role === 'user'
-                                            ? "bg-primary text-primary-foreground"
-                                            : "bg-muted prose prose-sm dark:prose-invert max-w-none"
+                                            ? "bg-[#111] text-white dark:bg-white dark:text-[#111]"
+                                            : "bg-gray-100 dark:bg-white/[0.06] prose prose-sm dark:prose-invert max-w-none"
                                     )}>
                                         {m.role === 'assistant' ? (
                                             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
@@ -281,10 +281,10 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                             {/* Streaming in-progress bubble */}
                             {isLoading && (
                                 <div className="flex gap-2 text-xs mr-auto max-w-[90%]">
-                                    <div className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 bg-muted">
+                                    <div className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 bg-gray-100 dark:bg-white/[0.06]">
                                         <Bot className="h-3 w-3 animate-pulse" />
                                     </div>
-                                    <div className="p-2 rounded-lg bg-muted prose prose-sm dark:prose-invert max-w-none">
+                                    <div className="p-2 rounded-lg bg-gray-100 dark:bg-white/[0.06] prose prose-sm dark:prose-invert max-w-none">
                                         {streamingContent ? (
                                             <>
                                                 <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
@@ -293,7 +293,7 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                                                 <span className="inline-block w-1 h-3 bg-current animate-pulse ml-0.5 align-middle" />
                                             </>
                                         ) : (
-                                            <span className="text-muted-foreground italic">Thinking...</span>
+                                            <span className="text-gray-500 dark:text-white/40 italic">Thinking...</span>
                                         )}
                                     </div>
                                 </div>
@@ -316,7 +316,7 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                         </div>
                     </ScrollArea>
 
-                    <div className="p-3 border-t">
+                    <div className="p-3 border-t border-gray-100 dark:border-white/[0.05]">
                         <div className="flex gap-2">
                             <Input
                                 placeholder="Ask about your notes..."
