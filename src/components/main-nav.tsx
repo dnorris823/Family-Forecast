@@ -42,17 +42,21 @@ export function MainNav() {
     ]
 
     return (
-        <nav className="flex items-center space-x-4 lg:space-x-6">
+        <nav className="flex items-center gap-1 rounded-full bg-[#f0f0f0] p-1.5 dark:bg-white/[0.05] dark:backdrop-blur-md dark:border dark:border-white/[0.08]">
             {routes.map((route) => (
                 <Link
                     key={route.href}
                     href={route.href}
                     className={cn(
-                        "text-sm font-medium transition-colors hover:text-primary flex items-center gap-2",
-                        route.active ? "text-primary" : "text-muted-foreground"
+                        "awakee-nav-pill rounded-full px-4 py-1.5 text-sm",
+                        route.active
+                            ? "bg-white font-medium text-[#111] shadow-sm scale-[1.02] dark:bg-gradient-to-r dark:from-violet-600 dark:to-blue-500 dark:text-white dark:shadow-lg dark:shadow-violet-500/20"
+                            : "font-normal text-gray-500 hover:text-gray-800 dark:text-white/50 dark:hover:text-white/80"
                     )}
                 >
-                    <route.icon className="h-4 w-4" />
+                    {/* Icon only on mobile */}
+                    <route.icon className="h-4 w-4 md:hidden" />
+                    {/* Label only on md+ */}
                     <span className="hidden md:inline">{route.label}</span>
                 </Link>
             ))}

@@ -29,33 +29,37 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --brand-accent: 14 56% 50%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 0 0% 70%;
+    --muted: 0 0% 13%;
+    --muted-foreground: 0 0% 48%;
+    --accent: 0 0% 13%;
+    --accent-foreground: 0 0% 95%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 95%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --brand-accent: 14 65% 60%;
+    --accent-violet: 263 70% 58%;
+    --accent-blue: 217 91% 60%;
   }
 }
 
@@ -68,71 +72,195 @@
   }
 }
 
-/* ── Accent Palettes ────────────────────────────────────────────────────── */
-/* Applied via data-palette attribute on <html>.                             */
-/* Overrides --primary, --primary-foreground, --ring, --accent,              */
-/* and --accent-foreground for each palette in both light and dark modes.   */
+/* ── Awakee Light Theme ─────────────────────────────────────────────────── */
+/* Applied via .awakee class on a wrapper element.                           */
+/* Light-first: white bg, near-black text, rounder radius.                  */
 
-/* Ocean Blue */
-[data-palette="ocean"] {
-  --primary: 213 94% 52%;
+.awakee {
+  color-scheme: light;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 7%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 7%;
+  --primary: 0 0% 7%;
   --primary-foreground: 0 0% 100%;
-  --ring: 213 94% 52%;
-  --accent: 213 50% 93%;
-  --accent-foreground: 213 60% 25%;
-}
-.dark[data-palette="ocean"] {
-  --primary: 213 80% 65%;
-  --primary-foreground: 213 50% 10%;
-  --ring: 213 80% 65%;
-  --accent: 213 35% 18%;
-  --accent-foreground: 213 60% 90%;
-}
-
-/* Sage Green */
-[data-palette="sage"] {
-  --primary: 152 45% 38%;
-  --primary-foreground: 0 0% 100%;
-  --ring: 152 45% 38%;
-  --accent: 152 30% 92%;
-  --accent-foreground: 152 45% 20%;
-}
-.dark[data-palette="sage"] {
-  --primary: 152 45% 55%;
-  --primary-foreground: 152 30% 8%;
-  --ring: 152 45% 55%;
-  --accent: 152 25% 16%;
-  --accent-foreground: 152 40% 88%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 20%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 7%;
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 0 0% 7%;
+  --radius: 1rem;
 }
 
-/* Warm Amber */
-[data-palette="amber"] {
-  --primary: 38 92% 45%;
-  --primary-foreground: 0 0% 100%;
-  --ring: 38 92% 45%;
-  --accent: 38 70% 92%;
-  --accent-foreground: 38 60% 20%;
-}
-.dark[data-palette="amber"] {
-  --primary: 38 85% 60%;
-  --primary-foreground: 38 40% 8%;
-  --ring: 38 85% 60%;
-  --accent: 38 40% 16%;
-  --accent-foreground: 38 60% 90%;
+/* Roboto Mono utility */
+.font-mono-ui {
+  font-family: var(--font-mono, 'Roboto Mono', ui-monospace, monospace);
 }
 
-/* Soft Rose */
-[data-palette="rose"] {
-  --primary: 340 65% 50%;
-  --primary-foreground: 0 0% 100%;
-  --ring: 340 65% 50%;
-  --accent: 340 45% 93%;
-  --accent-foreground: 340 50% 25%;
+/* Playfair Display italic utility */
+.font-display {
+  font-family: var(--font-display, Georgia, serif);
+  font-style: italic;
 }
-.dark[data-palette="rose"] {
-  --primary: 340 60% 68%;
-  --primary-foreground: 340 30% 8%;
-  --ring: 340 60% 68%;
-  --accent: 340 30% 16%;
-  --accent-foreground: 340 50% 90%;
+
+/* Awakee card hover: subtle lift */
+.awakee-card {
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+.awakee-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px) scale(1.005);
+}
+.dark .awakee-card:hover {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.12), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px) scale(1.005);
+}
+
+/* Awakee pill nav active item */
+.awakee-nav-pill {
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-up { animation: fadeUp 0.55s ease both; }
+.animate-fade-in { animation: fadeIn 0.4s ease both; }
+
+/* ── Framer Design System ───────────────────────────────────────────────── */
+
+/* Dark-scoped gradient heading — white fade */
+.dark .dark-gradient-heading {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Dark-scoped gradient stat numbers */
+.dark .gradient-stat {
+  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Violet→blue gradient text (login accent, light+dark) */
+.gradient-text-accent {
+  background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient CTA button */
+.btn-gradient {
+  background: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
+  color: #fff;
+  transition: opacity 0.2s ease;
+}
+.btn-gradient:hover { opacity: 0.88; }
+
+/* Glass panel */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Dot grid page background — dark only */
+.dark .bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Top violet radial glow overlay */
+.bg-glow-top {
+  background: radial-gradient(ellipse 70% 30% at 50% -5%, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+}
+
+/* Framer-style card with gradient border on hover */
+.framer-card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+.framer-card:hover {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.12), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px) scale(1.005);
+}
+
+/* Glow pulse — for chat trigger button */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.25), 0 4px 24px rgba(0, 0, 0, 0.4); }
+  50%       { box-shadow: 0 0 45px rgba(139, 92, 246, 0.45), 0 4px 24px rgba(0, 0, 0, 0.4); }
+}
+.animate-glow-pulse { animation: glowPulse 3s ease-in-out infinite; }
+
+/* ── Awakee Dark Mode ───────────────────────────────────────────────────── */
+/* Applies when next-themes adds .dark to <html> and .awakee is on the      */
+/* dashboard wrapper div. Also covers the login page via .dark directly.    */
+
+/* ── @uiw/react-md-editor: neutralise GitHub Primer blue dark vars ──────── */
+/* The library's dark theme uses GitHub's blue-black palette. Override with  */
+/* Awakee's neutral #111 black. Scoped to .awakee so it only fires on our   */
+/* dashboard wrapper, not globally.                                           */
+
+.awakee [data-color-mode="dark"] .wmde-markdown,
+.awakee [data-color-mode="dark"] .wmde-markdown-var {
+  --color-canvas-default: #111;
+  --color-canvas-subtle: #1a1a1a;
+  --color-fg-default: rgba(255, 255, 255, 0.87);
+  --color-fg-muted: rgba(255, 255, 255, 0.40);
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-muted: rgba(255, 255, 255, 0.05);
+  --color-neutral-muted: rgba(255, 255, 255, 0.06);
+  --color-accent-fg: rgba(255, 255, 255, 0.70);
+  --color-accent-emphasis: rgba(255, 255, 255, 0.12);
+  --color-prettylights-syntax-markup-heading: rgba(255, 255, 255, 0.80);
+}
+
+/* ── Awakee Dark Mode ───────────────────────────────────────────────────── */
+/* Applies when next-themes adds .dark to <html> and .awakee is on the      */
+/* dashboard wrapper div. Also covers the login page via .dark directly.    */
+
+.dark .awakee {
+  color-scheme: dark;
+  --background: 0 0% 4%;
+  --foreground: 0 0% 95%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 95%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 0 0% 95%;
+  --primary-foreground: 0 0% 4%;
+  --secondary: 0 0% 13%;
+  --secondary-foreground: 0 0% 70%;
+  --muted: 0 0% 13%;
+  --muted-foreground: 0 0% 48%;
+  --accent: 0 0% 13%;
+  --accent-foreground: 0 0% 95%;
+  --destructive: 0 70% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 0 0% 95%;
+  --radius: 1rem;
+  --brand-accent: 14 65% 60%;
 }

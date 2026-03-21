@@ -1,9 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { CalendarDays, CheckCircle2, FileText, ChevronRight, Clock } from "lucide-react"
+import { CalendarDays, CheckCircle2, FileText, ArrowUpRight, Clock } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
@@ -20,31 +18,92 @@ interface AtAGlanceProps {
     data: DashboardData
 }
 
+const priorityColors: Record<string, string> = {
+    urgent: "bg-white/20 text-white",
+    high: "bg-white/15 text-white/80",
+    medium: "bg-white/10 text-white/60",
+    low: "bg-white/[0.06] text-white/40",
+}
+
 export function AtAGlance({ data }: AtAGlanceProps) {
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* Upcoming Events */}
-            <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/20 dark:to-background">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4 text-blue-500" />
+        <div className="space-y-4">
+            {/* ── Stats bar ────────────────────────────────────────────── */}
+            <div className="framer-card grid grid-cols-3 divide-x divide-gray-200 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.06] dark:divide-white/[0.06] dark:bg-white/[0.03]">
+                <div className="animate-fade-up [animation-delay:0.3s] px-8 py-7 text-center">
+                    <div className="flex items-start justify-center">
+                        <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
+                        <span className="gradient-stat text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
+                            {data.events.length}
+                        </span>
+                    </div>
+                    <p className="font-mono-ui mt-2 text-[10px] uppercase tracking-widest text-gray-400">
                         Upcoming Events
-                    </CardTitle>
-                    <Link href="/dashboard/calendar">
-                        <Badge variant="outline" className="h-6 px-1 hover:bg-blue-100 dark:hover:bg-blue-900/40">
-                            <ChevronRight className="h-4 w-4" />
-                        </Badge>
-                    </Link>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-3">
+                    </p>
+                </div>
+                <div className="animate-fade-up [animation-delay:0.35s] px-8 py-7 text-center">
+                    <div className="flex items-start justify-center">
+                        <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
+                        <span className="gradient-stat text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
+                            {data.totalTasks}
+                        </span>
+                    </div>
+                    <p className="font-mono-ui mt-2 text-[10px] uppercase tracking-widest text-gray-400">
+                        Active Tasks
+                    </p>
+                </div>
+                <div className="animate-fade-up [animation-delay:0.4s] px-8 py-7 text-center">
+                    <div className="flex items-start justify-center">
+                        <sup className="mt-2 text-xl font-bold text-gray-400">+</sup>
+                        <span className="gradient-stat text-6xl font-bold tracking-tight text-[#111] dark:text-white/90">
+                            {data.notes.length}
+                        </span>
+                    </div>
+                    <p className="font-mono-ui mt-2 text-[10px] uppercase tracking-widest text-gray-400">
+                        Brain Notes
+                    </p>
+                </div>
+            </div>
+
+            {/* ── Bento grid ───────────────────────────────────────────── */}
+            <div className="grid grid-cols-3 grid-rows-2 gap-4">
+
+                {/* Events — dark card, spans 2 cols × 2 rows */}
+                <div className="awakee-card framer-card animate-fade-up [animation-delay:0.45s] col-span-2 row-span-2 relative overflow-hidden flex flex-col rounded-3xl bg-[#111] p-8 text-white">
+                    <div className="pointer-events-none absolute inset-0 rounded-3xl" style={{background:'radial-gradient(ellipse 60% 30% at 50% 0%, rgba(139,92,246,0.07) 0%, transparent 70%)'}} aria-hidden />
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <CalendarDays className="h-4 w-4 text-white/50" />
+                            <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/40">
+                                Upcoming Events
+                            </span>
+                        </div>
+                        <Link
+                            href="/dashboard/calendar"
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-white/50 transition-colors hover:border-white/60 hover:text-white"
+                        >
+                            <ArrowUpRight className="h-3.5 w-3.5" />
+                        </Link>
+                    </div>
+
+                    <div className="mt-6 flex-1 space-y-0">
                         {data.events.length === 0 ? (
-                            <p className="text-xs text-muted-foreground italic py-4">No upcoming events</p>
+                            <p className="font-mono-ui py-4 text-sm italic text-white/30">
+                                Nothing scheduled — enjoy the quiet.
+                            </p>
                         ) : (
-                            data.events.map((event) => (
-                                <div key={event.id} className="flex flex-col gap-1 border-l-2 border-blue-200 pl-3 py-1">
-                                    <span className="text-sm font-medium leading-none">{event.title}</span>
-                                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                            data.events.map((event, i) => (
+                                <div
+                                    key={event.id}
+                                    className={cn(
+                                        "flex items-start justify-between py-4",
+                                        i < data.events.length - 1 && "border-b border-white/[0.08]"
+                                    )}
+                                >
+                                    <span className="text-base font-medium text-white/90">
+                                        {event.title}
+                                    </span>
+                                    <div className="font-mono-ui ml-4 flex shrink-0 items-center gap-1.5 text-[11px] text-white/30">
                                         <Clock className="h-3 w-3" />
                                         {format(new Date(event.start_time), "MMM d, h:mm a")}
                                     </div>
@@ -52,77 +111,94 @@ export function AtAGlance({ data }: AtAGlanceProps) {
                             ))
                         )}
                     </div>
-                </CardContent>
-            </Card>
 
-            {/* Active Tasks */}
-            <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-purple-50 to-white dark:from-purple-950/20 dark:to-background">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                        <CheckCircle2 className="h-4 w-4 text-purple-500" />
-                        Active Tasks
-                    </CardTitle>
-                    <Link href="/dashboard/tasks">
-                        <Badge variant="outline" className="h-6 font-normal">
-                            {data.totalTasks} total
-                        </Badge>
-                    </Link>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-3">
+                    {data.highPriorityTasks > 0 && (
+                        <div className="mt-6 flex items-center gap-2 rounded-2xl bg-white/[0.06] px-4 py-3">
+                            <span className="h-2 w-2 rounded-full bg-orange-400" />
+                            <span className="text-sm text-white/60">
+                                {data.highPriorityTasks} high-priority task{data.highPriorityTasks !== 1 ? "s" : ""} need attention
+                            </span>
+                        </div>
+                    )}
+                </div>
+
+                {/* Tasks — gradient card */}
+                <div className="awakee-card animate-fade-up [animation-delay:0.5s] flex flex-col rounded-3xl bg-gradient-to-br from-violet-600 to-blue-500 p-6">
+                    <div className="flex items-center justify-between">
+                        <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/60">
+                            Active Tasks
+                        </span>
+                        <Link href="/dashboard/tasks">
+                            <CheckCircle2 className="h-4 w-4 text-white/30 transition-colors hover:text-white/70" />
+                        </Link>
+                    </div>
+                    <div className="mt-4 flex-1 space-y-2">
                         {data.tasks.length === 0 ? (
-                            <p className="text-xs text-muted-foreground italic py-4">No active tasks</p>
+                            <p className="text-sm italic text-white/60">All clear — nothing on your plate.</p>
                         ) : (
-                            data.tasks.map((task) => (
+                            data.tasks.slice(0, 3).map((task) => (
                                 <div key={task.id} className="flex items-center justify-between gap-2">
-                                    <span className="text-sm line-clamp-1">{task.title}</span>
-                                    <Badge
-                                        variant={task.priority === 'urgent' ? 'destructive' : task.priority === 'high' ? 'default' : 'secondary'}
-                                        className="text-[10px] h-5 px-1.5 capitalize"
-                                    >
+                                    <span className="line-clamp-1 text-sm font-medium text-white/90">
+                                        {task.title}
+                                    </span>
+                                    <span className={cn(
+                                        "font-mono-ui shrink-0 rounded-full px-2 py-0.5 text-[9px] uppercase tracking-wider",
+                                        priorityColors[task.priority] ?? "bg-white/10 text-white/60"
+                                    )}>
                                         {task.priority}
-                                    </Badge>
+                                    </span>
                                 </div>
                             ))
                         )}
                     </div>
-                </CardContent>
-            </Card>
+                    {data.totalTasks > 3 && (
+                        <Link
+                            href="/dashboard/tasks"
+                            className="font-mono-ui mt-4 text-[10px] uppercase tracking-widest text-white/60 hover:text-white/90"
+                        >
+                            +{data.totalTasks - 3} more →
+                        </Link>
+                    )}
+                </div>
 
-            {/* Recent Notes */}
-            <Card className="overflow-hidden border-none shadow-md bg-gradient-to-br from-amber-50 to-white dark:from-amber-950/20 dark:to-background">
-                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-amber-500" />
-                        Second Brain
-                    </CardTitle>
-                    <Link href="/dashboard/brain">
-                        <Badge variant="outline" className="h-6 px-1 hover:bg-amber-100 dark:hover:bg-amber-900/40">
-                            <ChevronRight className="h-4 w-4" />
-                        </Badge>
-                    </Link>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-3">
+                {/* Notes — light gray card */}
+                <div className="awakee-card framer-card animate-fade-up [animation-delay:0.55s] flex flex-col rounded-3xl bg-[#f5f5f5] p-6 dark:bg-white/[0.04]">
+                    <div className="flex items-center justify-between">
+                        <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40">
+                            Second Brain
+                        </span>
+                        <Link href="/dashboard/brain">
+                            <FileText className="h-4 w-4 text-black/30 transition-colors hover:text-black/70 dark:text-white/30 dark:hover:text-white/70" />
+                        </Link>
+                    </div>
+                    <div className="mt-4 flex-1 space-y-2">
                         {data.notes.length === 0 ? (
-                            <p className="text-xs text-muted-foreground italic py-4">No recent notes</p>
+                            <p className="text-sm italic text-black/40 dark:text-white/30">Start your first note.</p>
                         ) : (
-                            data.notes.map((note) => (
+                            data.notes.slice(0, 4).map((note) => (
                                 <Link
                                     key={note.id}
                                     href={`/dashboard/brain?note=${note.id}`}
-                                    className="flex items-center gap-2 group"
+                                    className="group flex items-center gap-2"
                                 >
-                                    <div className="h-1.5 w-1.5 rounded-full bg-amber-400 group-hover:scale-125 transition-transform" />
-                                    <span className="text-sm truncate group-hover:text-amber-600 transition-colors">
-                                        {note.title || 'Untitled'}
+                                    <span className="h-1 w-1 shrink-0 rounded-full bg-black/20 transition-colors group-hover:bg-black/60 dark:bg-white/20 dark:group-hover:bg-white/60" />
+                                    <span className="truncate text-sm text-black/60 transition-colors group-hover:text-black/90 dark:text-white/60 dark:group-hover:text-white/90">
+                                        {note.title || "Untitled"}
                                     </span>
                                 </Link>
                             ))
                         )}
                     </div>
-                </CardContent>
-            </Card>
+                    {data.notes.length > 4 && (
+                        <Link
+                            href="/dashboard/brain"
+                            className="font-mono-ui mt-4 text-[10px] uppercase tracking-widest text-black/40 hover:text-black/70 dark:text-white/40 dark:hover:text-white/70"
+                        >
+                            View all →
+                        </Link>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }

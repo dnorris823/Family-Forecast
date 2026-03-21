@@ -3,8 +3,6 @@
 import * as React from "react"
 import { format, isSameMonth, isSameDay, parseISO } from "date-fns"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { CreateEventDialog } from "@/components/calendar/create-event-dialog"
 import { getEvents } from "./actions"
@@ -24,82 +22,111 @@ export default function CalendarPage() {
     const fetchEvents = React.useCallback(async () => {
         const data = await getEvents(startDate, endDate)
         setEvents(data as unknown as Event[])
-    }, [startDate, endDate]) // Dependencies for useCallback based on what getEvents uses
+    }, [startDate, endDate])
 
-    // Subscribe to realtime changes
     useRealtimeSubscription('events', fetchEvents)
 
-    // Fetch events when month changes
     React.useEffect(() => {
         fetchEvents()
     }, [fetchEvents])
 
-    const handleNextMonth = () => {
+    const handleNextMonth = () =>
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))
-    }
-
-    const handlePrevMonth = () => {
+    const handlePrevMonth = () =>
         setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))
-    }
 
     return (
-        <div className="flex-1 space-y-4 h-full flex flex-col">
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight">Calendar</h2>
-                <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="icon" onClick={handlePrevMonth}>
+        <div className="flex h-full flex-col space-y-6">
+            {/* Header */}
+            <div className="flex items-end justify-between pt-4">
+                <div>
+                    <p className="animate-fade-up font-mono-ui mb-1 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-white/30">
+                        Schedule
+                    </p>
+                    <h1 className="animate-fade-up [animation-delay:0.1s] dark-gradient-heading text-5xl font-bold leading-none tracking-tight text-[#111] dark:text-white/95 lg:text-6xl">
+                        Calendar<span className="font-display">.</span>
+                    </h1>
+                </div>
+
+                <div className="animate-fade-up [animation-delay:0.18s] flex items-center gap-2">
+                    <button
+                        onClick={handlePrevMonth}
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10"
+                    >
                         <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <div className="font-semibold w-32 text-center">
+                    </button>
+                    <span className="font-mono-ui w-28 text-center text-sm font-medium text-gray-700 dark:text-white/70">
                         {format(currentMonth, "MMMM yyyy")}
-                    </div>
-                    <Button variant="outline" size="icon" onClick={handleNextMonth}>
+                    </span>
+                    <button
+                        onClick={handleNextMonth}
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 transition-colors hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10"
+                    >
                         <ChevronRight className="h-4 w-4" />
-                    </Button>
+                    </button>
                     <CreateEventDialog onSuccess={fetchEvents} />
                 </div>
             </div>
 
-            <Card className="flex-1">
-                <CardContent className="p-0 h-full">
-                    <div className="grid grid-cols-7 h-full border-l border-t bg-muted/20">
-                        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                            <div key={day} className="p-2 text-center font-semibold text-sm border-r border-b bg-background">
-                                {day}
-                            </div>
-                        ))}
+            {/* Calendar grid */}
+            <div className="animate-fade-up [animation-delay:0.28s] flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-gray-200 dark:border-white/[0.06]">
+                {/* Day headers */}
+                <div className="grid grid-cols-7 border-b border-gray-200 bg-[#f8f8f8] dark:border-white/[0.06] dark:bg-white/[0.02]">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                        <div
+                            key={day}
+                            className="font-mono-ui py-3 text-center text-[10px] uppercase tracking-widest text-gray-400 dark:text-white/30"
+                        >
+                            {day}
+                        </div>
+                    ))}
+                </div>
 
-                        {days.map((day, dayIdx) => (
-                            <div
-                                key={day.toString()}
+                {/* Day cells */}
+                <div className="grid flex-1 grid-cols-7 grid-rows-6 bg-white dark:bg-[#111]">
+                    {days.map((day) => (
+                        <div
+                            key={day.toString()}
+                            onClick={() => setSelectedDate(day)}
+                            className={cn(
+                                "flex cursor-pointer flex-col border-b border-r border-gray-100 p-2 transition-colors dark:border-white/[0.04]",
+                                "hover:bg-[#f8f8f8] dark:hover:bg-white/[0.02]",
+                                !isSameMonth(day, firstDayOfMonth) && "opacity-25",
+                                isSameDay(day, selectedDate ?? new Date(-1)) && "bg-[#f5f5f5] dark:bg-white/[0.03]"
+                            )}
+                        >
+                            <time
+                                dateTime={format(day, 'yyyy-MM-dd')}
                                 className={cn(
-                                    "min-h-[100px] p-2 border-r border-b bg-background transition-colors hover:bg-muted/50 cursor-pointer flex flex-col",
-                                    !isSameMonth(day, firstDayOfMonth) && "text-muted-foreground bg-muted/10",
-                                    isSameDay(day, new Date()) && "bg-accent/20"
+                                    "ml-auto flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium",
+                                    isSameDay(day, new Date())
+                                        ? "bg-gradient-to-br from-violet-500 to-blue-500 font-bold text-white"
+                                        : "text-gray-700 dark:text-white/70"
                                 )}
-                                onClick={() => setSelectedDate(day)}
                             >
-                                <time dateTime={format(day, 'yyyy-MM-dd')} className={cn(
-                                    "ml-auto text-sm w-6 h-6 flex items-center justify-center rounded-full",
-                                    isSameDay(day, new Date()) && "bg-primary text-primary-foreground font-bold"
-                                )}>
-                                    {format(day, 'd')}
-                                </time>
-                                <div className="flex-1 mt-1 space-y-1">
-                                    {events.filter(e => isSameDay(parseISO(e.start_time), day)).map((event) => (
-                                        <div key={event.id} className={cn(
-                                            "px-2 py-1 rounded text-xs truncate font-medium",
-                                            !event.is_private ? "bg-primary/10 text-primary border border-primary/20" : "bg-secondary text-secondary-foreground"
-                                        )}>
+                                {format(day, 'd')}
+                            </time>
+                            <div className="mt-1 space-y-0.5">
+                                {events
+                                    .filter((e) => isSameDay(parseISO(e.start_time), day))
+                                    .map((event) => (
+                                        <div
+                                            key={event.id}
+                                            className={cn(
+                                                "truncate rounded-full px-2 py-0.5 text-[10px] font-medium",
+                                                !event.is_private
+                                                    ? "bg-gradient-to-r from-violet-600 to-blue-500 text-white"
+                                                    : "bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-white/50"
+                                            )}
+                                        >
                                             {event.title}
                                         </div>
                                     ))}
-                                </div>
                             </div>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     )
 }

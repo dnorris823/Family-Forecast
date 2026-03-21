@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { AI_TOOLS } from '@/lib/ai/tool-definitions'
 import { executeAITool } from '@/lib/ai/tools'
+import { getAIOptions } from '@/app/dashboard/ai/actions'
 import { createClient } from '@/lib/supabase/server'
 import { addDays } from 'date-fns'
 
@@ -16,7 +17,10 @@ export async function POST(req: Request) {
             })
         }
 
-        // 2. Construct system prompt with tools
+        // 2. Build AI Memory context (personality → rules → behavior → user-data → index)
+        const aiMemoryContext = await getAIMemoryContext()
+
+        // 3. Construct system prompt
         const systemPrompt = `You are a helpful Family AI Assistant with access to the family calendar, tasks, and notes.
 
 Current Context:
@@ -24,11 +28,26 @@ ${context}
 
 You have access to tools to read and modify data. Always fetch fresh data before answering questions about current state.
 When creating or updating items, confirm the action was successful.
-Respect user privacy - only access data the user is allowed to see.`
+Respect user privacy - only access data the user is allowed to see.
 
-        // 3. Call Ollama with tools
+When you receive image_search results, output them as a fenced code block with language "image-results" containing ONLY the JSON results array. Example:
+\`\`\`image-results
+[{"title":"Example","thumbnail":"https://...","url":"https://...","source":"example.com"}]
+\`\`\`
+When you receive video_search results, do the same with language "video-results":
+\`\`\`video-results
+[{"title":"Example","thumbnail":"https://...","url":"https://...","source":"youtube.com","description":"...","age":"..."}]
+\`\`\`
+Always include a brief text line before the code block describing what you found.${aiMemoryContext ? `\n\n## Persistent AI Memory\n${aiMemoryContext}` : ''}`
+
+        // 4. Call Ollama with tools
         const OLLAMA_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434'
         const selectedModel = model || 'kimi-k2.5:cloud'
+        const aiOptions = await getAIOptions()
+        const ollamaOptions = {
+            temperature: aiOptions.temperature,
+            ...(aiOptions.num_ctx ? { num_ctx: aiOptions.num_ctx } : {})
+        }
 
         const conversationMessages = [
             { role: 'system', content: systemPrompt },
@@ -49,6 +68,7 @@ Respect user privacy - only access data the user is allowed to see.`
                     model: selectedModel,
                     messages: conversationMessages,
                     tools: AI_TOOLS,
+                    options: ollamaOptions,
                     stream: false
                 })
             })
@@ -94,6 +114,7 @@ Respect user privacy - only access data the user is allowed to see.`
                     body: JSON.stringify({
                         model: selectedModel,
                         messages: conversationMessages,
+                        options: ollamaOptions,
                         stream: true
                     })
                 })
@@ -152,6 +173,39 @@ Respect user privacy - only access data the user is allowed to see.`
         console.error('AI Chat Error:', error)
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
+}
+
+/**
+ * Fetch all AI Memory files for the current user and format them for the system prompt.
+ * Injection order: personality → rules → behavior → user-data → _index
+ */
+async function getAIMemoryContext(): Promise<string> {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return ''
+
+    const ORDERED_TITLES = ['personality', 'rules', 'behavior', 'user-data', '_index']
+
+    const { data: files } = await supabase
+        .from('second_brain')
+        .select('title, content')
+        .eq('created_by', user.id)
+        .eq('folder_path', '/AI Memory')
+
+    if (!files || files.length === 0) return ''
+
+    const fileMap = new Map(files.map(f => [f.title, f.content]))
+
+    const sections: string[] = []
+    for (const title of ORDERED_TITLES) {
+        const content = fileMap.get(title)
+        if (content) {
+            const label = title === '_index' ? 'Memory Index' : title.charAt(0).toUpperCase() + title.slice(1)
+            sections.push(`### ${label}\n${content}`)
+        }
+    }
+
+    return sections.join('\n\n')
 }
 
 // Fetch fresh, privacy-filtered context from database (T033-T034)
