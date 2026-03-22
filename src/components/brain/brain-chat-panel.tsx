@@ -113,7 +113,10 @@ export function BrainChatPanel({ currentNote, activeNoteId, onNoteCreated, onNot
                 setSessions(updated)
             }
 
-            // Detect if AI created or updated a note
+            // Notify other components (e.g. Brain page) that AI may have modified data
+            window.dispatchEvent(new CustomEvent('ai-data-changed'))
+
+            // Also call legacy callbacks for direct parent notification
             const lc = accumulated.toLowerCase()
             if (onNoteCreated && (lc.includes("i've created") || lc.includes("i created") || lc.includes("created a note"))) {
                 setTimeout(() => onNoteCreated(), 500)

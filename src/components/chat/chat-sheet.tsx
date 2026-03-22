@@ -114,6 +114,9 @@ export function ChatSheet() {
             const finalMessages = [...updatedMessages, { role: 'assistant' as const, content: responseContent }]
             setMessages(finalMessages)
 
+            // Notify other components (e.g. Brain page) that AI may have modified data
+            window.dispatchEvent(new CustomEvent('ai-data-changed'))
+
             // Auto-save: create session on first exchange, update on subsequent ones
             if (!currentSessionId) {
                 const result = await createChatSession(

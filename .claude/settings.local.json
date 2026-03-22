@@ -31,7 +31,8 @@
       "mcp__github__get_file_contents",
       "mcp__playwright__browser_resize",
       "WebFetch(domain:webflow.com)",
-      "WebFetch(domain:awakee-template.webflow.io)"
+      "WebFetch(domain:awakee-template.webflow.io)",
+      "Bash(cd:*)"
     ]
   }
 }
