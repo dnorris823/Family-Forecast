@@ -244,6 +244,7 @@ The AI assistant is intentionally **not** given access to personal external acco
 - **Shared shopping lists** as a specialized task type.
 - **Calendar integrations** (Google Calendar, Apple Calendar sync via CalDAV/iCal).
 - **AI service accounts** — dedicated external accounts the AI can use to interact with third-party tools on the family's behalf (e.g., a shared email, utility accounts), without accessing personal accounts.
+- **MCP server for Claude integration** — build an MCP (Model Context Protocol) server that exposes FamilyForecast data (events, tasks, notes) to the Claude Desktop and mobile apps. This would allow interacting with family data directly from Claude outside the FamilyForecast UI. Claude Desktop supports local MCP servers (ideal for home network use); Claude Mobile supports remote MCP servers only (would require a tunnel like Cloudflare Tunnel to reach the home network). Free Claude plan supports 1 custom MCP connector.
 
 ---
 
