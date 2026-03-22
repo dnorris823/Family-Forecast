@@ -226,6 +226,13 @@ async function getFreshContext(activeNoteId?: string): Promise<string | null> {
     const userId = user.id
     const familyId = profile.family_id
 
+    // Family members with emails (for send_email tool)
+    const { data: familyMembers } = await supabase
+        .from('profiles')
+        .select('full_name, username, email')
+        .eq('family_id', familyId)
+        .not('email', 'is', null)
+
     // Privacy filter: own items always included; other family members' items only if not private
     const privacyFilter = `created_by.eq.${userId},and(is_private.eq.false,family_id.eq.${familyId})`
 
@@ -280,6 +287,15 @@ async function getFreshContext(activeNoteId?: string): Promise<string | null> {
 
     contextStr += `User: ${profile?.email || 'Unknown'}\n\n`
 
+    if (familyMembers && familyMembers.length > 0) {
+        contextStr += `Family Members (use these emails with send_email tool):\n`
+        familyMembers.forEach(m => {
+            const name = m.full_name || m.username || 'Unknown'
+            contextStr += `- ${name}: ${m.email}\n`
+        })
+        contextStr += '\n'
+    }
+
     if (events && events.length > 0) {
         contextStr += `Calendar Events:\n`
         events.forEach(e => {
@@ -330,6 +346,15 @@ async function getFreshContext(activeNoteId?: string): Promise<string | null> {
             minute: '2-digit'
         })}\n\n`
         trimmedContextStr += `User: ${profile?.email || 'Unknown'}\n\n`
+
+        if (familyMembers && familyMembers.length > 0) {
+            trimmedContextStr += `Family Members (use these emails with send_email tool):\n`
+            familyMembers.forEach(m => {
+                const name = m.full_name || m.username || 'Unknown'
+                trimmedContextStr += `- ${name}: ${m.email}\n`
+            })
+            trimmedContextStr += '\n'
+        }
 
         if (events && events.length > 0) {
             const nearEvents = events.filter(e => new Date(e.start_time) <= thirtyDaysOut)

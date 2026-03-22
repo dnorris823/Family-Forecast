@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { formatISO, addDays, startOfDay, endOfDay } from 'date-fns'
+import { sendEmail } from '@/lib/email/resend'
 
 // Tool Execution Functions
 export async function executeAITool(toolName: string, args: any) {
@@ -75,6 +76,9 @@ export async function executeAITool(toolName: string, args: any) {
 
             case 'video_search':
                 return await videoSearch(profile.brave_api_key, args)
+
+            case 'send_email':
+                return await handleSendEmail(supabase, user.id, profile.family_id, args)
 
             default:
                 return { error: `Unknown tool: ${toolName}` }
@@ -413,6 +417,26 @@ async function videoSearch(apiKey: string | null, args: any) {
         .filter((r: any) => r.thumbnail)
 
     return { results, query: args.query }
+}
+
+async function handleSendEmail(supabase: any, userId: string, familyId: string, args: any) {
+    if (!args.to) return { error: 'to is required' }
+    if (!args.subject) return { error: 'subject is required' }
+    if (!args.body) return { error: 'body is required' }
+
+    // Verify the recipient is a member of the same family (security check)
+    const { data: recipient } = await supabase
+        .from('profiles')
+        .select('id, full_name, email')
+        .eq('family_id', familyId)
+        .eq('email', args.to)
+        .single()
+
+    if (!recipient) {
+        return { error: `No family member found with email ${args.to}. Use the family member emails listed in your context.` }
+    }
+
+    return await sendEmail(args.to, args.subject, args.body)
 }
 
 async function webSearch(apiKey: string | null, args: any) {

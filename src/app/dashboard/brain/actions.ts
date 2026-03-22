@@ -70,6 +70,7 @@ export async function updateNote(
         return { error: error.message }
     }
 
+    revalidatePath('/dashboard/brain')
     return { success: true, data }
 }
 

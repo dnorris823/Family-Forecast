@@ -318,5 +318,30 @@ export const AI_TOOLS = [
                 required: ['query']
             }
         }
+    },
+    {
+        type: 'function',
+        function: {
+            name: 'send_email',
+            description: 'Send an email notification to a family member. Family members and their email addresses are listed in your context. Use this to send reminders, event notifications, task assignments, or any helpful updates.',
+            parameters: {
+                type: 'object',
+                properties: {
+                    to: {
+                        type: 'string',
+                        description: 'Recipient email address. Must be a family member email from your context.'
+                    },
+                    subject: {
+                        type: 'string',
+                        description: 'Email subject line'
+                    },
+                    body: {
+                        type: 'string',
+                        description: 'Email body as plain text. Be friendly and concise.'
+                    }
+                },
+                required: ['to', 'subject', 'body']
+            }
+        }
     }
 ]

@@ -59,6 +59,13 @@ export default function SecondBrainPage() {
 
     useRealtimeSubscription('second_brain', fetchNotes)
 
+    // Re-fetch when AI chat modifies data (custom event from ChatSheet/BrainChatPanel)
+    React.useEffect(() => {
+        const handler = () => { fetchNotes() }
+        window.addEventListener('ai-data-changed', handler)
+        return () => window.removeEventListener('ai-data-changed', handler)
+    }, [fetchNotes])
+
     React.useEffect(() => {
         fetchNotes().then(async () => {
             // Seed default structure if /User/_index doesn't exist yet
